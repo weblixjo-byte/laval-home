@@ -6,7 +6,6 @@ import { client } from '../client';
 import PropertyCard from '../components/PropertyCard';
 import Reviews from '../components/Reviews';
 import { REAL_ESTATE_IMAGES } from '../data/realEstateImages';
-import { FALLBACK_PROPERTIES } from '../data/fallbackProperties';
 import { 
   ArrowRight, 
   ShieldCheck, 
@@ -46,7 +45,7 @@ const NEIGHBORHOODS = [
 
 const Home = ({ onInquire }) => {
   const navigate = useNavigate();
-  const [properties, setProperties] = useState(FALLBACK_PROPERTIES);
+  const [properties, setProperties] = useState([]);
   const [searchCity, setSearchCity] = useState('');
 
   useEffect(() => {
@@ -84,11 +83,11 @@ const Home = ({ onInquire }) => {
         if (data && data.length > 0) {
           setProperties(data);
         } else {
-          setProperties(FALLBACK_PROPERTIES);
+          setProperties([]);
         }
       } catch (err) {
         console.error("Sanity fetch error:", err);
-        setProperties(FALLBACK_PROPERTIES);
+        setProperties([]);
       }
     };
 
@@ -222,11 +221,30 @@ const Home = ({ onInquire }) => {
             </Link>
           </div>
           
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {properties.slice(0, 6).map((property, idx) => (
-              <PropertyCard key={property.id || idx} property={property} onSelect={onInquire} />
-            ))}
-          </div>
+          {properties.length > 0 ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+              {properties.slice(0, 6).map((property, idx) => (
+                <PropertyCard key={property.id || idx} property={property} onSelect={onInquire} />
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-16 px-6 rounded-2xl bg-neutral-50 border border-neutral-200/70 max-w-2xl mx-auto space-y-4">
+              <h3 className="text-xl font-semibold text-neutral-900">
+                Private Off-Market Portfolio
+              </h3>
+              <p className="text-xs text-neutral-500 font-light leading-relaxed max-w-lg mx-auto">
+                Our active estates are currently represented under strict non-disclosure agreements. Please contact our private concierge to schedule a confidential showing or review unlisted residences.
+              </p>
+              <div className="pt-2">
+                <Link
+                  to="/contact"
+                  className="bg-neutral-950 text-white px-7 py-3 rounded-full text-xs uppercase tracking-wider font-semibold hover:bg-[#D4AF37] transition-all inline-block shadow-sm"
+                >
+                  Consult Advisory Desk
+                </Link>
+              </div>
+            </div>
+          )}
         </div>
       </section>
 

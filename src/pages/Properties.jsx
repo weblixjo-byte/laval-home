@@ -4,18 +4,15 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useSearchParams } from 'react-router-dom';
 import PropertyCard from '../components/PropertyCard';
 import { client } from '../client';
-import { FALLBACK_PROPERTIES } from '../data/fallbackProperties';
 import { Search, SlidersHorizontal, ArrowUpDown } from 'lucide-react';
-
-const DEFAULT_CATEGORIES = ['All', 'Villas', 'Penthouses', 'Estates', 'Waterfront', 'Mansions', 'Sold'];
 
 const Properties = ({ onInquire }) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const typeFromUrl = searchParams.get('type') || searchParams.get('brand');
   const searchFromUrl = searchParams.get('search') || '';
 
-  const [categories, setCategories] = useState(DEFAULT_CATEGORIES);
-  const [allProperties, setAllProperties] = useState(FALLBACK_PROPERTIES);
+  const [categories, setCategories] = useState([]);
+  const [allProperties, setAllProperties] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState(searchFromUrl);
   const [sortBy, setSortBy] = useState('featured'); // 'featured', 'price_desc', 'price_asc', 'sqft_desc'
@@ -36,10 +33,10 @@ const Properties = ({ onInquire }) => {
         const categoriesQuery = `*[_type == "propertyType"] | order(order asc, name asc) { name }`;
         const categoriesData = await client.fetch(categoriesQuery);
         if (categoriesData && categoriesData.length > 0) {
-          const uniqueCats = ['All', ...new Set(categoriesData.map((c) => c.name.trim())), 'Sold'];
+          const uniqueCats = ['All', ...new Set(categoriesData.map((c) => c.name.trim()))];
           setCategories(uniqueCats);
         } else {
-          setCategories(DEFAULT_CATEGORIES);
+          setCategories([]);
         }
 
         // Fetch properties
@@ -75,11 +72,12 @@ const Properties = ({ onInquire }) => {
         if (propertiesData && propertiesData.length > 0) {
           setAllProperties(propertiesData);
         } else {
-          setAllProperties(FALLBACK_PROPERTIES);
+          setAllProperties([]);
         }
       } catch (err) {
-        console.error("Sanity fetch error, using curated portfolio:", err);
-        setAllProperties(FALLBACK_PROPERTIES);
+        console.error("Sanity fetch error:", err);
+        setAllProperties([]);
+        setCategories([]);
       } finally {
         setIsLoading(false);
       }
@@ -216,30 +214,32 @@ const Properties = ({ onInquire }) => {
           </div>
         </motion.div>
 
-        {/* Categories Bar */}
-        <div className="mb-10 overflow-x-auto no-scrollbar pb-2">
-          <div className="flex items-center gap-2 min-w-max p-1 bg-neutral-200/50 rounded-full w-fit">
-            {categories.map((category) => {
-              const isActive = selectedCategory.toLowerCase() === category.toLowerCase();
-              return (
-                <button
-                  key={category}
-                  onClick={() => handleCategoryChange(category)}
-                  className={`px-5 py-2 rounded-full text-xs font-medium transition-all duration-200 relative ${
-                    isActive
-                      ? 'bg-neutral-900 text-white shadow-sm'
-                      : 'text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100/70'
-                  }`}
-                >
-                  {category}
-                  {category === 'Sold' && !isActive && (
-                    <span className="ml-1.5 w-1.5 h-1.5 rounded-full bg-amber-600 inline-block"></span>
-                  )}
-                </button>
-              );
-            })}
+        {/* Categories Bar - Rendered strictly when categories exist in Sanity */}
+        {categories.length > 1 && (
+          <div className="mb-10 overflow-x-auto no-scrollbar pb-2">
+            <div className="flex items-center gap-2 min-w-max p-1 bg-neutral-200/50 rounded-full w-fit">
+              {categories.map((category) => {
+                const isActive = selectedCategory.toLowerCase() === category.toLowerCase();
+                return (
+                  <button
+                    key={category}
+                    onClick={() => handleCategoryChange(category)}
+                    className={`px-5 py-2 rounded-full text-xs font-medium transition-all duration-200 relative ${
+                      isActive
+                        ? 'bg-neutral-900 text-white shadow-sm'
+                        : 'text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100/70'
+                    }`}
+                  >
+                    {category}
+                    {category === 'Sold' && !isActive && (
+                      <span className="ml-1.5 w-1.5 h-1.5 rounded-full bg-amber-600 inline-block"></span>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Responsive Grid */}
         <motion.div 
@@ -263,7 +263,7 @@ const Properties = ({ onInquire }) => {
         </motion.div>
 
         {/* Empty State */}
-        {filteredAndSortedProperties.length === 0 && (
+        {!isLoading && filteredAndSortedProperties.length === 0 && (
           <motion.div 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -272,21 +272,34 @@ const Properties = ({ onInquire }) => {
             <div className="w-12 h-12 bg-neutral-100 rounded-full flex items-center justify-center mx-auto mb-4 text-neutral-400">
               <SlidersHorizontal size={20} />
             </div>
-            <h3 className="text-base font-semibold text-neutral-900 mb-1.5">No Matching Residences</h3>
+            <h3 className="text-base font-semibold text-neutral-900 mb-1.5">
+              {allProperties.length === 0 ? "Off-Market Residential Advisory" : "No Matching Residences"}
+            </h3>
             <p className="text-xs text-neutral-500 font-light max-w-md mx-auto mb-6 leading-relaxed">
-              We couldn't find any properties matching your current criteria {searchQuery ? `for "${searchQuery}"` : ''} under {selectedCategory}.
+              {allProperties.length === 0
+                ? "Our active portfolio is managed discreetly. Add properties via the Admin Studio (/studio) or contact our concierge desk for confidential representations."
+                : `We couldn't find any properties matching your current criteria${searchQuery ? ` for "${searchQuery}"` : ''} under ${selectedCategory}.`}
             </p>
-            <button 
-              onClick={() => {
-                handleCategoryChange('All');
-                setSearchQuery('');
-                searchParams.delete('search');
-                setSearchParams(searchParams);
-              }}
-              className="px-6 py-2.5 bg-neutral-900 text-white rounded-full text-xs font-semibold hover:bg-[#D4AF37] transition-colors"
-            >
-              Reset All Filters
-            </button>
+            {allProperties.length > 0 ? (
+              <button 
+                onClick={() => {
+                  handleCategoryChange('All');
+                  setSearchQuery('');
+                  searchParams.delete('search');
+                  setSearchParams(searchParams);
+                }}
+                className="px-6 py-2.5 bg-neutral-900 text-white rounded-full text-xs font-semibold hover:bg-[#D4AF37] transition-colors"
+              >
+                Reset All Filters
+              </button>
+            ) : (
+              <a
+                href="/contact"
+                className="px-6 py-2.5 bg-neutral-900 text-white rounded-full text-xs font-semibold hover:bg-[#D4AF37] transition-colors inline-block"
+              >
+                Inquire With Concierge
+              </a>
+            )}
           </motion.div>
         )}
       </div>
