@@ -27,8 +27,8 @@ export const luxuryTheme = buildLegacyTheme({
   '--gray': props['--laval-text-muted'],
   '--gray-base': props['--laval-surface-card'],
 
-  '--component-bg': props['--laval-surface'],
-  '--component-text-color': props['--laval-white'],
+  '--component-bg': '#ffffff',
+  '--component-text-color': '#0f172a',
 
   /* Brand */
   '--brand-primary': props['--laval-gold'],
