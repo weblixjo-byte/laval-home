@@ -3,26 +3,26 @@ export default {
   title: 'Properties',
   type: 'document',
   groups: [
-    { name: 'overview', title: '1. Overview / النظرة العامة', default: true },
-    { name: 'pricing', title: '2. Pricing & Status / السعر والحالة' },
-    { name: 'media', title: '3. Media & Gallery / الصور والمعرض' },
-    { name: 'specs', title: '4. Specs & Amenities / المواصفات والميزات' },
-    { name: 'location', title: '5. Location / الموقع' },
-    { name: 'narrative', title: '6. Narrative / الوصف المعماري' },
+    { name: 'overview', title: '1. Overview', default: true },
+    { name: 'pricing', title: '2. Pricing & Status' },
+    { name: 'media', title: '3. Media & Gallery' },
+    { name: 'specs', title: '4. Specs & Amenities' },
+    { name: 'location', title: '5. Location' },
+    { name: 'narrative', title: '6. Narrative' },
   ],
   fields: [
     // --- 1. OVERVIEW ---
     {
       name: 'title',
-      title: 'Property Title / عنوان العقار',
+      title: 'Property Title',
       type: 'string',
       group: 'overview',
       description: 'e.g. The Skyrise Penthouse, Buckhead Modern Estate, Lake Lanier Sanctuary',
-      validation: (Rule) => Rule.required().error('Property title is required / عنوان العقار مطلوب'),
+      validation: (Rule) => Rule.required().error('Property title is required'),
     },
     {
       name: 'slug',
-      title: 'Slug / الرابط الدلالي',
+      title: 'Slug',
       type: 'slug',
       group: 'overview',
       options: {
@@ -35,90 +35,90 @@ export default {
             .replace(/\s+/g, '-')
             .slice(0, 96),
       },
-      validation: (Rule) => Rule.required().error('Slug is required / الرابط الدلالي مطلوب'),
+      validation: (Rule) => Rule.required().error('Slug is required'),
     },
     {
       name: 'category',
-      title: 'Category / التصنيف',
+      title: 'Category',
       type: 'reference',
       to: [{ type: 'category' }],
       group: 'overview',
-      description: 'اختر تصنيف العقار من قائمة التصنيفات التي قمت بإنشائها.',
+      description: 'Select a category from your configured categories list.',
     },
     {
       name: 'propertyType',
-      title: 'Category Label (Fallback / يدوي)',
+      title: 'Category Label (Manual / Fallback)',
       type: 'string',
       group: 'overview',
-      description: 'يمكنك كتابة تصنيف يدوي هنا إذا لم ترغب بربطه بتصنيف مسجل في قائمة التصنيفات.',
+      description: 'Optional manual category label if not linking to a predefined category document.',
     },
     {
       name: 'isSold',
-      title: 'Mark as Sold / تم البيع (Off-Market)',
+      title: 'Mark as Sold (Off-Market)',
       type: 'boolean',
       group: 'overview',
-      description: 'عند تفعيل هذا الخيار، سيتم عرض العقار تلقائياً كعقار تم بيعه وإخفاؤه من العقارات المعروضة للبيع.',
+      description: 'When enabled, this residence is moved to the Sold portfolio and marked as archived.',
       initialValue: false,
     },
     {
       name: 'isFeatured',
-      title: 'Featured Residence / عقار مميز بالصفحة الرئيسية',
+      title: 'Featured Residence',
       type: 'boolean',
       group: 'overview',
-      description: 'تثبيت العقار في قسم العقارات المميزة في الصفحة الرئيسية.',
+      description: 'Highlight this residence in the exclusive portfolio on the homepage.',
       initialValue: false,
     },
 
     // --- 2. PRICING & STATUS ---
     {
       name: 'status',
-      title: 'Market Status / حالة العقار',
+      title: 'Market Status',
       type: 'string',
       group: 'pricing',
       options: {
         list: [
-          { title: 'For Sale / معروض للبيع', value: 'For Sale' },
-          { title: 'Pending / قيد التفاوض والتعاقد', value: 'Pending' },
-          { title: 'Sold / Leased / تم البيع أو التأجير', value: 'Sold / Leased' },
-          { title: 'Off-Market / خارج العرض العام', value: 'Off-Market' },
+          { title: 'For Sale', value: 'For Sale' },
+          { title: 'Pending', value: 'Pending' },
+          { title: 'Sold / Leased', value: 'Sold / Leased' },
+          { title: 'Off-Market', value: 'Off-Market' },
         ],
       },
       initialValue: 'For Sale',
     },
     {
       name: 'priceDisplayMode',
-      title: 'Price Display / طريقة عرض السعر',
+      title: 'Price Display Mode',
       type: 'string',
       group: 'pricing',
       options: {
         list: [
-          { title: 'Show Fixed Price / إظهار السعر المحدد', value: 'fixed' },
-          { title: 'Price on Request / السعر عند الطلب (سري)', value: 'request' },
+          { title: 'Show Fixed Price', value: 'fixed' },
+          { title: 'Price on Request (Confidential)', value: 'request' },
         ],
       },
       initialValue: 'fixed',
     },
     {
       name: 'price',
-      title: 'Price (USD) / السعر بالدولار',
+      title: 'Asking Price (USD)',
       type: 'number',
       group: 'pricing',
-      description: 'القيمة المالية للعقار بالدولار الأمريكي (USD).',
+      description: 'Asking price in USD.',
       hidden: ({ document }) => document?.priceDisplayMode === 'request',
     },
 
     // --- 3. MEDIA & GALLERY ---
     {
       name: 'mainImage',
-      title: 'Main Architectural Image / الصورة الرئيسية',
+      title: 'Main Architectural Image',
       type: 'image',
       group: 'media',
       options: { hotspot: true },
-      validation: (Rule) => Rule.required().error('Main image is required / الصورة الرئيسية مطلوبة'),
+      validation: (Rule) => Rule.required().error('Main image is required'),
     },
     {
       name: 'gallery',
-      title: 'Property Gallery / ألبوم صور العقار',
+      title: 'Property Photo Gallery',
       type: 'array',
       group: 'media',
       of: [{ type: 'image', options: { hotspot: true } }],
@@ -130,51 +130,51 @@ export default {
     // --- 4. SPECS & AMENITIES ---
     {
       name: 'specifications',
-      title: 'Property Specifications / المواصفات الفنية',
+      title: 'Property Specifications',
       type: 'object',
       group: 'specs',
       fields: [
-        { name: 'bedrooms', title: 'Bedrooms / غرف النوم', type: 'number' },
-        { name: 'bathrooms', title: 'Bathrooms / دورات المياه', type: 'number' },
-        { name: 'sqft', title: 'Living Space (Sq Ft) / المساحة الداخلية بالقدم المربع', type: 'number' },
-        { name: 'lotSize', title: 'Lot Size / مساحة الأرض الإجمالية', type: 'string', description: 'e.g. 0.85 Acres, 1.2 Hectares' },
-        { name: 'yearBuilt', title: 'Year Built / سنة البناء', type: 'number' },
-        { name: 'garageSpaces', title: 'Garage / عدد مواقف السيارات', type: 'number' },
+        { name: 'bedrooms', title: 'Bedrooms', type: 'number' },
+        { name: 'bathrooms', title: 'Bathrooms', type: 'number' },
+        { name: 'sqft', title: 'Living Space (Sq Ft)', type: 'number' },
+        { name: 'lotSize', title: 'Lot Size', type: 'string', description: 'e.g. 0.85 Acres, 1.2 Hectares' },
+        { name: 'yearBuilt', title: 'Year Built', type: 'number' },
+        { name: 'garageSpaces', title: 'Garage / Parking Spaces', type: 'number' },
       ],
     },
     {
       name: 'features',
-      title: 'Key Features & Amenities / الميزات والخدمات',
+      title: 'Key Features & Amenities',
       type: 'array',
       group: 'specs',
       of: [{ type: 'string' }],
       options: {
         layout: 'tags',
       },
-      description: 'اكتب الميزة واضغط Enter، مثال: Infinity Pool, Smart Home Automation, Private Elevator, Wine Cellar, Spa',
+      description: 'Type amenity and press Enter (e.g. Infinity Pool, Wine Cellar, Smart Home, Private Elevator, Spa)',
     },
 
     // --- 5. LOCATION ---
     {
       name: 'location',
-      title: 'Location Details / تفاصيل الموقع',
+      title: 'Location Details',
       type: 'object',
       group: 'location',
       fields: [
-        { name: 'neighborhood', title: 'Neighborhood / الحي أو المنطقة', type: 'string', description: 'e.g. Historic Roswell, Buckhead, Tuxedo Park' },
-        { name: 'city', title: 'City / المدينة', type: 'string', initialValue: 'Roswell' },
-        { name: 'state', title: 'State / الولاية أو المقاطعة', type: 'string', initialValue: 'GA' },
+        { name: 'neighborhood', title: 'Neighborhood / Community', type: 'string', description: 'e.g. Historic Roswell, Buckhead, Tuxedo Park' },
+        { name: 'city', title: 'City', type: 'string', initialValue: 'Roswell' },
+        { name: 'state', title: 'State', type: 'string', initialValue: 'GA' },
       ],
     },
 
     // --- 6. NARRATIVE ---
     {
       name: 'description',
-      title: 'Architectural & Lifestyle Narrative / الوصف المعماري الكامل',
+      title: 'Architectural & Lifestyle Narrative',
       type: 'text',
       group: 'narrative',
       rows: 6,
-      description: 'وصف تفصيلي للتصميم المعماري، المواد المستخدمة، والإطلالات الفاخرة.',
+      description: 'Comprehensive narrative detailing architectural heritage, interior finishes, and luxury amenities.',
     },
   ],
   preview: {
@@ -197,8 +197,8 @@ export default {
           : 'No Price';
       
       const badges = [];
-      if (isSold) badges.push('🔴 [SOLD]');
-      if (isFeatured) badges.push('⭐ [FEATURED]');
+      if (isSold) badges.push('[SOLD]');
+      if (isFeatured) badges.push('[FEATURED]');
 
       return {
         title: `${badges.length ? badges.join(' ') + ' ' : ''}${title || 'Untitled Property'}`,

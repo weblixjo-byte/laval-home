@@ -105,7 +105,7 @@ export default defineConfig({
           .items([
             // 1. All Properties
             S.listItem()
-              .title('All Residences / جميع العقارات')
+              .title('All Residences')
               .icon(Building2)
               .child(
                 S.documentList()
@@ -116,7 +116,7 @@ export default defineConfig({
 
             // 2. Active Residences
             S.listItem()
-              .title('Active For Sale / المعروضة للبيع')
+              .title('Active (For Sale)')
               .icon(Home)
               .child(
                 S.documentList()
@@ -127,11 +127,11 @@ export default defineConfig({
 
             // 3. Sold / Closed
             S.listItem()
-              .title('Sold & Off-Market / العقارات المباعة')
+              .title('Sold & Off-Market')
               .icon(CheckCircle2)
               .child(
                 S.documentList()
-                  .title('Sold / Off-Market Residences')
+                  .title('Sold & Off-Market Residences')
                   .filter('_type == "property" && (isSold == true || status == "Sold / Leased")')
                   .defaultOrdering([{ field: '_createdAt', direction: 'desc' }])
               ),
@@ -140,7 +140,7 @@ export default defineConfig({
 
             // 4. Categories Management
             S.listItem()
-              .title('Property Categories / إدارة التصنيفات')
+              .title('Property Categories')
               .icon(Tags)
               .child(
                 S.documentList()

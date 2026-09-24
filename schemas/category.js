@@ -5,14 +5,14 @@ export default {
   fields: [
     {
       name: 'title',
-      title: 'Category Title (اسم التصنيف)',
+      title: 'Category Title',
       type: 'string',
-      description: 'e.g. Modern Villa, Penthouse, Waterfront Estate, Luxury Mansion, Townhouse, أراضي استثمارية',
-      validation: (Rule) => Rule.required().error('Category title is required / اسم التصنيف مطلوب'),
+      description: 'e.g. Modern Villa, Penthouse, Waterfront Estate, Luxury Mansion, Townhouse',
+      validation: (Rule) => Rule.required().error('Category title is required'),
     },
     {
       name: 'slug',
-      title: 'Slug (الرابط الدلالي)',
+      title: 'Slug',
       type: 'slug',
       options: {
         source: 'title',
@@ -24,25 +24,25 @@ export default {
             .replace(/\s+/g, '-')
             .slice(0, 96),
       },
-      validation: (Rule) => Rule.required().error('Slug is required / الرابط الدلالي مطلوب'),
+      validation: (Rule) => Rule.required().error('Slug is required'),
     },
     {
       name: 'order',
-      title: 'Display Order (ترتيب الظهور)',
+      title: 'Display Order',
       type: 'number',
       description: 'Determines the tab position in the website filter bar (e.g. 1, 2, 3...)',
       initialValue: 1,
     },
     {
       name: 'description',
-      title: 'Description (وصف التصنيف - اختياري)',
+      title: 'Description (Optional)',
       type: 'text',
       rows: 2,
       description: 'Short description of properties in this category',
     },
     {
       name: 'image',
-      title: 'Category Cover Image (صورة التصنيف - اختياري)',
+      title: 'Category Cover Image (Optional)',
       type: 'image',
       options: { hotspot: true },
     },
