@@ -77,11 +77,9 @@ const Footer = () => {
             <h4 className="text-xs uppercase tracking-[0.2em] font-semibold mb-6 text-neutral-300">Portfolio</h4>
             <ul className="space-y-3 text-xs text-neutral-400 font-light">
               <li><Link to="/properties" className="hover:text-white transition-colors">All Residences</Link></li>
-              <li><Link to="/properties?type=Villas" className="hover:text-white transition-colors">Modern Villas</Link></li>
-              <li><Link to="/properties?type=Penthouses" className="hover:text-white transition-colors">Skyrise Penthouses</Link></li>
-              <li><Link to="/properties?type=Estates" className="hover:text-white transition-colors">Private Estates</Link></li>
-              <li><Link to="/properties?type=Waterfront" className="hover:text-white transition-colors">Waterfront Retreats</Link></li>
-              <li><Link to="/properties?type=Sold" className="text-[#D4AF37] hover:text-[#C5A059] transition-colors">Sold Portfolio</Link></li>
+              <li><Link to="/properties" className="hover:text-white transition-colors">Active Portfolio</Link></li>
+              <li><Link to="/properties?type=Sold" className="text-[#D4AF37] hover:text-[#C5A059] transition-colors">Sold & Closed Portfolio</Link></li>
+              <li><Link to="/contact" className="hover:text-white transition-colors">Private Client Concierge</Link></li>
             </ul>
           </div>
 

@@ -1,64 +1,153 @@
+import React from 'react';
 import { defineConfig, buildLegacyTheme } from 'sanity';
 import { structureTool } from 'sanity/structure';
+import { Building2, Home, CheckCircle2, Tags, Layers } from 'lucide-react';
 import property from './schemas/property';
+import category from './schemas/category';
 
+// Luxury Brand Palette (Obsidian & Champagne Gold)
 const props = {
-  '--laval-white': '#ffffff',
-  '--laval-black': '#0D0E10',
-  '--laval-grey': '#f8f9fa',
-  '--laval-accent': '#D4AF37',
+  '--laval-black': '#0B0C0E',
+  '--laval-surface': '#14161D',
+  '--laval-surface-card': '#1B1E28',
+  '--laval-white': '#FFFFFF',
+  '--laval-text-muted': '#94A3B8',
+  '--laval-gold': '#D4AF37',
+  '--laval-gold-hover': '#DFBE52',
+  '--laval-emerald': '#10B981',
+  '--laval-amber': '#F59E0B',
+  '--laval-ruby': '#EF4444',
 };
 
-export const myTheme = buildLegacyTheme({
+export const luxuryTheme = buildLegacyTheme({
   /* Base theme colors */
   '--black': props['--laval-black'],
   '--white': props['--laval-white'],
 
-  '--gray': '#8e8e93',
-  '--gray-base': '#8e8e93',
+  '--gray': props['--laval-text-muted'],
+  '--gray-base': props['--laval-surface-card'],
 
-  '--component-bg': props['--laval-white'],
-  '--component-text-color': props['--laval-black'],
+  '--component-bg': props['--laval-surface'],
+  '--component-text-color': props['--laval-white'],
 
   /* Brand */
-  '--brand-primary': props['--laval-accent'],
+  '--brand-primary': props['--laval-gold'],
 
   /* Default button */
-  '--default-button-color': '#555',
-  '--default-button-primary-color': props['--laval-accent'],
-  '--default-button-success-color': '#2e7d32',
-  '--default-button-warning-color': '#ed6c02',
-  '--default-button-danger-color': '#d32f2f',
+  '--default-button-color': props['--laval-surface-card'],
+  '--default-button-primary-color': props['--laval-gold'],
+  '--default-button-success-color': props['--laval-emerald'],
+  '--default-button-warning-color': props['--laval-amber'],
+  '--default-button-danger-color': props['--laval-ruby'],
 
   /* State */
-  '--state-info-color': props['--laval-accent'],
-  '--state-success-color': '#2e7d32',
-  '--state-warning-color': '#ed6c02',
-  '--state-danger-color': '#d32f2f',
+  '--state-info-color': props['--laval-gold'],
+  '--state-success-color': props['--laval-emerald'],
+  '--state-warning-color': props['--laval-amber'],
+  '--state-danger-color': props['--laval-ruby'],
 
   /* Navbar */
-  '--main-navigation-color': props['--laval-white'],
-  '--main-navigation-color--inverted': props['--laval-black'],
+  '--main-navigation-color': props['--laval-black'],
+  '--main-navigation-color--inverted': props['--laval-white'],
 
-  '--focus-color': props['--laval-accent'],
+  '--focus-color': props['--laval-gold'],
 });
+
+const LavalStudioLogo = () =>
+  React.createElement(
+    'div',
+    { style: { display: 'flex', alignItems: 'center', gap: '10px', padding: '4px 6px' } },
+    React.createElement('img', {
+      src: '/logo-light.webp',
+      alt: 'Laval Luxury Homes',
+      style: { height: '26px', width: 'auto', objectFit: 'contain' },
+      onError: (e) => {
+        e.currentTarget.style.display = 'none';
+      },
+    }),
+    React.createElement(
+      'div',
+      { style: { display: 'flex', flexDirection: 'column', lineHeight: 1.2 } },
+      React.createElement(
+        'span',
+        { style: { fontSize: '13px', fontWeight: '700', letterSpacing: '0.08em', color: '#FFFFFF' } },
+        'LAVAL LUXURY HOMES'
+      ),
+      React.createElement(
+        'span',
+        { style: { fontSize: '9px', fontWeight: '600', letterSpacing: '0.18em', color: '#D4AF37', textTransform: 'uppercase' } },
+        'PROPERTIES & CATEGORIES DASHBOARD'
+      )
+    )
+  );
 
 export default defineConfig({
   name: 'default',
-  title: 'Laval Luxury Homes | Properties Manager',
-  theme: myTheme,
+  title: 'Laval Luxury Homes | Studio',
+  theme: luxuryTheme,
 
   projectId: 'g983wkxj',
   dataset: 'production',
   basePath: '/studio',
 
+  studio: {
+    components: {
+      logo: LavalStudioLogo,
+    },
+  },
+
   plugins: [
     structureTool({
+      title: 'Navigation',
       structure: (S) =>
         S.list()
-          .title('Portfolio Management')
+          .title('Executive Studio Menu')
           .items([
-            S.documentTypeListItem('property').title('Properties (Add / Edit / Sold)'),
+            // 1. All Properties
+            S.listItem()
+              .title('All Residences / جميع العقارات')
+              .icon(Building2)
+              .child(
+                S.documentList()
+                  .title('All Residences (Add / Edit / Delete)')
+                  .filter('_type == "property"')
+                  .defaultOrdering([{ field: '_createdAt', direction: 'desc' }])
+              ),
+
+            // 2. Active Residences
+            S.listItem()
+              .title('Active For Sale / المعروضة للبيع')
+              .icon(Home)
+              .child(
+                S.documentList()
+                  .title('Active Portfolio (For Sale)')
+                  .filter('_type == "property" && (isSold != true || !defined(isSold))')
+                  .defaultOrdering([{ field: '_createdAt', direction: 'desc' }])
+              ),
+
+            // 3. Sold / Closed
+            S.listItem()
+              .title('Sold & Off-Market / العقارات المباعة')
+              .icon(CheckCircle2)
+              .child(
+                S.documentList()
+                  .title('Sold / Off-Market Residences')
+                  .filter('_type == "property" && (isSold == true || status == "Sold / Leased")')
+                  .defaultOrdering([{ field: '_createdAt', direction: 'desc' }])
+              ),
+
+            S.divider(),
+
+            // 4. Categories Management
+            S.listItem()
+              .title('Property Categories / إدارة التصنيفات')
+              .icon(Tags)
+              .child(
+                S.documentList()
+                  .title('Categories (Add / Edit / Delete)')
+                  .filter('_type == "category"')
+                  .defaultOrdering([{ field: 'order', direction: 'asc' }])
+              ),
           ]),
     }),
   ],
@@ -66,6 +155,7 @@ export default defineConfig({
   schema: {
     types: [
       property,
+      category,
     ],
   },
 });

@@ -29,10 +29,12 @@ const Properties = ({ onInquire }) => {
     const fetchData = async () => {
       try {
         setIsLoading(true);
-        // Fetch properties strictly from Sanity
+        // Fetch properties strictly from Sanity with category reference
         const propertiesQuery = `*[_type == "property"] | order(_createdAt desc) {
           "id": _id,
           title,
+          "categoryTitle": category->title,
+          "categorySlug": category->slug.current,
           propertyType,
           status,
           price,
@@ -58,18 +60,31 @@ const Properties = ({ onInquire }) => {
           },
           description
         }`;
-        const propertiesData = await client.fetch(propertiesQuery);
-        if (propertiesData && propertiesData.length > 0) {
-          setAllProperties(propertiesData);
-          const uniqueTypes = [...new Set(propertiesData.map((p) => p.propertyType).filter(Boolean))];
-          const hasSold = propertiesData.some((p) => p.isSold || p.status === 'Sold / Leased');
-          if (uniqueTypes.length > 0 || hasSold) {
-            setCategories(['All', ...uniqueTypes, ...(hasSold ? ['Sold'] : [])]);
-          } else {
-            setCategories([]);
-          }
+
+        // Fetch categories dynamically created in Sanity Studio
+        const categoriesQuery = `*[_type == "category"] | order(order asc, title asc) {
+          "id": _id,
+          title,
+          "slug": slug.current,
+          order
+        }`;
+
+        const [propertiesData, categoriesData] = await Promise.all([
+          client.fetch(propertiesQuery),
+          client.fetch(categoriesQuery),
+        ]);
+
+        const validProps = propertiesData || [];
+        setAllProperties(validProps);
+
+        const definedCats = (categoriesData || []).map((c) => c.title).filter(Boolean);
+        const propCats = validProps.map((p) => p.categoryTitle || p.propertyType).filter(Boolean);
+        const uniqueCategories = [...new Set([...definedCats, ...propCats])];
+        const hasSold = validProps.some((p) => p.isSold || p.status === 'Sold / Leased');
+
+        if (uniqueCategories.length > 0 || hasSold) {
+          setCategories(['All', ...uniqueCategories, ...(hasSold ? ['Sold'] : [])]);
         } else {
-          setAllProperties([]);
           setCategories([]);
         }
       } catch (err) {
@@ -83,7 +98,7 @@ const Properties = ({ onInquire }) => {
 
     fetchData();
 
-    const subscription = client.listen(`*[_type == "property"]`).subscribe(() => {
+    const subscription = client.listen(`*[_type in ["property", "category"]]`).subscribe(() => {
       fetchData();
     });
 
@@ -122,15 +137,20 @@ const Properties = ({ onInquire }) => {
         if (property.isSold || property.status === 'Sold / Leased') return false;
       }
 
+      const propCategory = (property.categoryTitle || property.propertyType || '').toLowerCase();
+      const currentSelected = selectedCategory.toLowerCase();
+
       const matchesCategory = 
         selectedCategory === 'All' || 
         isSoldFilter || 
-        (property.propertyType && property.propertyType.toLowerCase() === selectedCategory.toLowerCase()) ||
-        (property.propertyType && selectedCategory.toLowerCase().includes(property.propertyType.toLowerCase()));
+        propCategory === currentSelected ||
+        propCategory.includes(currentSelected) ||
+        currentSelected.includes(propCategory);
 
       const query = searchQuery.toLowerCase().trim();
       const matchesSearch = !query || 
         (property.title && property.title.toLowerCase().includes(query)) ||
+        (property.categoryTitle && property.categoryTitle.toLowerCase().includes(query)) ||
         (property.propertyType && property.propertyType.toLowerCase().includes(query)) ||
         (property.location?.city && property.location.city.toLowerCase().includes(query)) ||
         (property.location?.neighborhood && property.location.neighborhood.toLowerCase().includes(query));

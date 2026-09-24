@@ -54,6 +54,7 @@ const Home = ({ onInquire }) => {
         const query = `*[_type == "property" && isSold != true] | order(isFeatured desc, _createdAt desc)[0...6] {
           "id": _id,
           title,
+          "categoryTitle": category->title,
           propertyType,
           status,
           price,

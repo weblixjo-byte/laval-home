@@ -94,9 +94,9 @@ const PropertyCard = ({ property, onSelect }) => {
               <MapPin size={13} className="text-[#D4AF37] shrink-0" />
               <span className="truncate">{locationStr}</span>
             </div>
-            {property.propertyType && (
+            {(property.categoryTitle || property.propertyType) && (
               <span className="text-[10px] uppercase tracking-wider font-semibold text-[#D4AF37] shrink-0">
-                {property.propertyType}
+                {property.categoryTitle || property.propertyType}
               </span>
             )}
           </div>
