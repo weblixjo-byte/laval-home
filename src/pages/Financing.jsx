@@ -74,9 +74,6 @@ const Financing = () => {
               transition={{ duration: 0.7 }}
               className="space-y-6"
             >
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/15 text-[#D4AF37] text-xs font-semibold uppercase tracking-[0.2em]">
-                <Landmark size={13} /> Private Wealth Lending
-              </div>
               <h1 className="text-4xl md:text-7xl font-semibold tracking-tight leading-tight">
                 Bespoke Mortgage & Acquisition Structuring
               </h1>

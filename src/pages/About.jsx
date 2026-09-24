@@ -24,10 +24,6 @@ const About = () => {
             transition={{ duration: 0.7 }}
             className="lg:w-1/2 space-y-6 text-left"
           >
-            <div className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.25em] text-[#D4AF37] font-semibold">
-              <Compass size={14} /> Our Heritage & Philosophy
-            </div>
-            
             <h1 className="text-4xl md:text-6xl font-semibold text-neutral-900 tracking-tight leading-tight">
               Curating Extraordinary Architectural Living
             </h1>

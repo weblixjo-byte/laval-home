@@ -11,12 +11,9 @@ import {
   ArrowRight, 
   ShieldCheck, 
   Banknote, 
-  Sparkles,
   Compass,
   MapPin,
   Search,
-  Building2,
-  Lock,
   ArrowUpRight
 } from 'lucide-react';
 
@@ -51,7 +48,6 @@ const Home = ({ onInquire }) => {
   const navigate = useNavigate();
   const [properties, setProperties] = useState(FALLBACK_PROPERTIES);
   const [searchCity, setSearchCity] = useState('');
-  const [searchType, setSearchType] = useState('All');
 
   useEffect(() => {
     const fetchFeatured = async () => {
@@ -109,7 +105,6 @@ const Home = ({ onInquire }) => {
     e.preventDefault();
     const params = new URLSearchParams();
     if (searchCity.trim()) params.set('search', searchCity.trim());
-    if (searchType && searchType !== 'All') params.set('type', searchType);
     navigate(`/properties?${params.toString()}`);
   };
 
@@ -132,21 +127,11 @@ const Home = ({ onInquire }) => {
         </div>
 
         <div className="relative z-10 luxury-container w-full flex flex-col items-center text-center text-white my-auto">
-          {/* Eyebrow Pill */}
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-[#D4AF37] text-xs font-semibold uppercase tracking-[0.25em] mb-8 shadow-sm"
-          >
-            <Sparkles size={13} /> Exclusive Private Client Advisory
-          </motion.div>
-
           {/* Main Headline */}
           <motion.h1 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2, duration: 0.8 }}
+            transition={{ duration: 0.8 }}
             className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-bold leading-[1.05] tracking-tight max-w-5xl mb-6 text-white"
           >
             Exceptional Living. <br className="hidden sm:block" />
@@ -157,53 +142,37 @@ const Home = ({ onInquire }) => {
           <motion.p 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 0.4, duration: 0.8 }}
+            transition={{ delay: 0.2, duration: 0.8 }}
             className="text-base sm:text-lg text-neutral-300 max-w-2xl mx-auto font-light leading-relaxed mb-12"
           >
             Representing premier modern villas, waterfront retreats, and skyrise penthouses with institutional rigor and complete discretion.
           </motion.p>
           
-          {/* Floating Luxury Quick Search Box */}
+          {/* Streamlined Luxury Search Box */}
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.6, duration: 0.8 }}
-            className="w-full max-w-3xl bg-white/95 backdrop-blur-md p-3 sm:p-4 rounded-2xl md:rounded-full shadow-2xl border border-white/40 text-neutral-900"
+            transition={{ delay: 0.4, duration: 0.8 }}
+            className="w-full max-w-2xl bg-white/95 backdrop-blur-md p-2.5 sm:p-3 rounded-2xl md:rounded-full shadow-2xl border border-white/40 text-neutral-900"
           >
-            <form onSubmit={handleHeroSearch} className="flex flex-col md:flex-row items-center gap-3">
-              <div className="flex-1 flex items-center gap-3 px-4 py-2 w-full border-b md:border-b-0 md:border-r border-neutral-200">
-                <MapPin size={16} className="text-[#D4AF37] shrink-0" />
+            <form onSubmit={handleHeroSearch} className="flex flex-col sm:flex-row items-center gap-2">
+              <div className="flex-1 flex items-center gap-3 px-4 py-2 w-full">
+                <Search size={16} className="text-[#D4AF37] shrink-0" />
                 <input 
                   type="text"
-                  placeholder="Location (e.g. Roswell, Buckhead, Lake Lanier)..."
+                  placeholder="Search by neighborhood, city, or residence (e.g. Roswell, Buckhead)..."
                   value={searchCity}
                   onChange={(e) => setSearchCity(e.target.value)}
                   className="w-full bg-transparent text-xs sm:text-sm font-medium outline-none placeholder:text-neutral-400 placeholder:font-normal"
                 />
               </div>
 
-              <div className="flex-1 flex items-center gap-3 px-4 py-2 w-full border-b md:border-b-0 md:border-r border-neutral-200">
-                <Building2 size={16} className="text-[#D4AF37] shrink-0" />
-                <select
-                  value={searchType}
-                  onChange={(e) => setSearchType(e.target.value)}
-                  className="w-full bg-transparent text-xs sm:text-sm font-medium outline-none text-neutral-800 cursor-pointer appearance-none"
-                >
-                  <option value="All">All Property Types</option>
-                  <option value="Villas">Modern Villas</option>
-                  <option value="Penthouses">Skyrise Penthouses</option>
-                  <option value="Estates">Private Estates</option>
-                  <option value="Waterfront">Waterfront Residences</option>
-                  <option value="Mansions">Grand Mansions</option>
-                </select>
-              </div>
-
               <button
                 type="submit"
-                className="w-full md:w-auto px-8 py-3.5 rounded-full bg-neutral-950 text-white font-semibold text-xs uppercase tracking-wider hover:bg-[#D4AF37] transition-all flex items-center justify-center gap-2 shadow-md shrink-0"
+                className="w-full sm:w-auto px-8 py-3.5 rounded-full bg-neutral-950 text-white font-semibold text-xs uppercase tracking-wider hover:bg-[#D4AF37] transition-all flex items-center justify-center gap-2 shadow-md shrink-0"
               >
-                <Search size={14} />
                 <span>Search Portfolio</span>
+                <ArrowRight size={14} />
               </button>
             </form>
           </motion.div>
@@ -240,9 +209,6 @@ const Home = ({ onInquire }) => {
         <div className="luxury-container">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-14 gap-6">
             <div>
-              <span className="text-[11px] uppercase tracking-[0.3em] text-[#D4AF37] font-semibold block mb-2">
-                Prime Inventory
-              </span>
               <h2 className="text-3xl md:text-5xl font-semibold text-neutral-900 tracking-tight">
                 Featured Exclusive Residences
               </h2>
@@ -269,8 +235,8 @@ const Home = ({ onInquire }) => {
         <div className="luxury-container">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
             
-            {/* Left Image Collage */}
-            <div className="lg:col-span-6 relative">
+            {/* Left Image Clean without any overlay */}
+            <div className="lg:col-span-6">
               <div className="rounded-2xl overflow-hidden shadow-2xl border border-neutral-200/80">
                 <img 
                   src={REAL_ESTATE_IMAGES.heroVillaTwilight} 
@@ -279,22 +245,10 @@ const Home = ({ onInquire }) => {
                   loading="lazy" 
                 />
               </div>
-              <div className="absolute -bottom-8 -right-6 hidden sm:block p-6 rounded-2xl bg-white shadow-xl border border-neutral-100 max-w-xs text-left">
-                <div className="flex items-center gap-2 text-[#D4AF37] mb-1">
-                  <Lock size={14} />
-                  <span className="text-[10px] uppercase tracking-widest font-semibold">Off-Market Advisory</span>
-                </div>
-                <p className="text-xs text-neutral-600 font-light leading-relaxed">
-                  Over 40% of our portfolio is transacted off-market with zero public syndication for absolute client privacy.
-                </p>
-              </div>
             </div>
 
             {/* Right Narrative */}
             <div className="lg:col-span-6 space-y-6 text-left">
-              <span className="text-xs uppercase tracking-[0.25em] text-[#D4AF37] font-semibold block">
-                The Laval Standard
-              </span>
               <h2 className="text-3xl md:text-5xl font-semibold text-neutral-900 tracking-tight leading-tight">
                 Architectural Precision. <br />Discreet Representation.
               </h2>
@@ -305,16 +259,21 @@ const Home = ({ onInquire }) => {
                 From historic estates in Roswell to modern glass pavilions in Buckhead and lakefront retreats on Lake Lanier, our advisors combine deep municipal zoning expertise, private banking mortgage structuring, and confidential off-market syndication.
               </p>
 
-              <div className="grid grid-cols-2 gap-4 pt-2">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
                 <div className="p-4 rounded-xl bg-white border border-neutral-200/80">
                   <div className="text-[#D4AF37] font-semibold text-lg mb-1">01</div>
                   <h4 className="text-xs uppercase tracking-wider font-semibold text-neutral-900 mb-1">Title & Deed Rigor</h4>
-                  <p className="text-[11px] text-neutral-500 font-light">Comprehensive environmental, title, and architectural appraisal.</p>
+                  <p className="text-[11px] text-neutral-500 font-light">Comprehensive environmental, title, and appraisal review.</p>
                 </div>
                 <div className="p-4 rounded-xl bg-white border border-neutral-200/80">
                   <div className="text-[#D4AF37] font-semibold text-lg mb-1">02</div>
-                  <h4 className="text-xs uppercase tracking-wider font-semibold text-neutral-900 mb-1">Private Wealth Financing</h4>
-                  <p className="text-[11px] text-neutral-500 font-light">Direct underwriting liaison for jumbo and portfolio mortgages.</p>
+                  <h4 className="text-xs uppercase tracking-wider font-semibold text-neutral-900 mb-1">Private Wealth Lending</h4>
+                  <p className="text-[11px] text-neutral-500 font-light">Direct underwriting liaison for jumbo mortgages.</p>
+                </div>
+                <div className="p-4 rounded-xl bg-white border border-neutral-200/80">
+                  <div className="text-[#D4AF37] font-semibold text-lg mb-1">03</div>
+                  <h4 className="text-xs uppercase tracking-wider font-semibold text-neutral-900 mb-1">Off-Market Advisory</h4>
+                  <p className="text-[11px] text-neutral-500 font-light">Over 40% transacted off-market with absolute privacy.</p>
                 </div>
               </div>
 
@@ -337,9 +296,6 @@ const Home = ({ onInquire }) => {
       <section className="py-24 md:py-32 bg-white">
         <div className="luxury-container">
           <div className="text-center mb-16 space-y-3">
-            <span className="text-xs uppercase tracking-[0.3em] text-[#D4AF37] font-semibold block">
-              Curated Enclaves
-            </span>
             <h2 className="text-3xl md:text-5xl font-semibold text-neutral-900 tracking-tight">
               Premier Georgia Neighborhoods
             </h2>
@@ -402,9 +358,6 @@ const Home = ({ onInquire }) => {
               </div>
               
               <div className="relative z-10">
-                <span className="text-[10px] uppercase tracking-[0.25em] text-[#D4AF37] font-semibold block mb-2">
-                  Private Wealth Financing
-                </span>
                 <h3 className="text-2xl md:text-4xl font-semibold text-white mb-3">
                   Luxury Mortgage Pre-Approval
                 </h3>
@@ -435,9 +388,6 @@ const Home = ({ onInquire }) => {
               </div>
               
               <div className="relative z-10">
-                <span className="text-[10px] uppercase tracking-[0.25em] text-[#D4AF37] font-semibold block mb-2">
-                  Seller Advisory
-                </span>
                 <h3 className="text-2xl md:text-4xl font-semibold text-white mb-3">
                   Confidential Estate Valuation
                 </h3>

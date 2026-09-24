@@ -1,41 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 // eslint-disable-next-line no-unused-vars
 import { motion, AnimatePresence } from 'framer-motion';
-import { client } from '../client';
 import { Search, MapPin, X, ArrowUpRight } from 'lucide-react';
-
-const DEFAULT_TYPES = ['Villas', 'Penthouses', 'Estates', 'Waterfront', 'Mansions'];
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [propertyTypes, setPropertyTypes] = useState(DEFAULT_TYPES);
   const [searchQuery, setSearchQuery] = useState('');
   const location = useLocation();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const fetchTypes = async () => {
-      try {
-        const query = `*[_type == "propertyType"] | order(order asc, name asc) { name }`;
-        const data = await client.fetch(query);
-        if (data && data.length > 0) {
-          const uniqueTypes = [...new Set(data.map((t) => t.name.trim()))];
-          setPropertyTypes(uniqueTypes);
-        }
-      } catch (err) {
-        console.error("Fetch property types error:", err);
-      }
-    };
-
-    fetchTypes();
-
-    const subscription = client.listen(`*[_type == "propertyType"]`).subscribe(() => {
-      fetchTypes();
-    });
-
-    return () => subscription.unsubscribe();
-  }, []);
 
   const handleSearch = (e) => {
     if (e.key === 'Enter' || e.type === 'submit') {
@@ -56,7 +29,7 @@ const Navbar = () => {
   return (
     <nav className="fixed w-full z-50 transition-all duration-300 bg-white/95 backdrop-blur-md border-b border-neutral-100 shadow-xs">
       {/* Main Header Row */}
-      <div className="luxury-container flex justify-between items-center h-18 py-3">
+      <div className="luxury-container flex justify-between items-center h-20 py-3">
         {/* Left: Mobile hamburger & Brand */}
         <div className="flex items-center space-x-6 md:space-x-8">
           <button
@@ -127,33 +100,6 @@ const Navbar = () => {
           >
             <span>Inquire</span>
             <ArrowUpRight size={13} />
-          </Link>
-        </div>
-      </div>
-
-      {/* Property Categories Row */}
-      <div className="border-t border-neutral-100 bg-white/70 backdrop-blur-xs py-2.5">
-        <div className="luxury-container flex justify-between md:justify-start items-center overflow-x-auto no-scrollbar gap-6 md:gap-8">
-          <Link
-            to="/properties"
-            className="text-[10px] uppercase tracking-[0.2em] font-medium transition-colors whitespace-nowrap text-neutral-500 hover:text-neutral-950"
-          >
-            All Residences
-          </Link>
-          {propertyTypes.map((type) => (
-            <Link
-              key={type}
-              to={`/properties?type=${encodeURIComponent(type)}`}
-              className="text-[10px] uppercase tracking-[0.2em] font-medium transition-colors whitespace-nowrap text-neutral-500 hover:text-neutral-950"
-            >
-              {type}
-            </Link>
-          ))}
-          <Link
-            to="/properties?type=Sold"
-            className="text-[10px] uppercase tracking-[0.2em] transition-colors whitespace-nowrap text-[#D4AF37] hover:text-[#C5A059] font-semibold"
-          >
-            Sold Portfolio
           </Link>
         </div>
       </div>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { urlFor } from '../client';
-import { Bed, Bath, Square, MapPin, Sparkles } from 'lucide-react';
+import { Bed, Bath, Square, MapPin } from 'lucide-react';
 import ProgressiveImage from './ProgressiveImage';
 
 const PropertyCard = ({ property, onSelect }) => {
@@ -75,38 +75,30 @@ const PropertyCard = ({ property, onSelect }) => {
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
         />
 
-        {/* Soft Status & Exclusive Badges */}
-        <div className="absolute top-3.5 left-3.5 flex flex-col gap-1.5 z-10">
-          {property.isSold ? (
-            <span className="glass-badge text-[10px] font-semibold uppercase tracking-[0.15em] px-3 py-1 rounded-full text-neutral-800 border border-neutral-300">
-              Sold / Leased
+        {/* Sold Badge Only */}
+        {property.isSold && (
+          <div className="absolute top-3.5 left-3.5 z-10">
+            <span className="text-[10px] font-semibold uppercase tracking-wider px-2.5 py-1 rounded bg-neutral-950/80 text-white backdrop-blur-sm">
+              Sold
             </span>
-          ) : property.isFeatured ? (
-            <span className="glass-badge text-[10px] font-semibold uppercase tracking-[0.15em] px-3 py-1 rounded-full text-amber-700 bg-amber-50/90 border border-amber-200/70 flex items-center gap-1.5 shadow-sm">
-              <Sparkles size={11} className="text-amber-600" /> Exclusive Portfolio
-            </span>
-          ) : (
-            <span className="glass-badge text-[10px] font-semibold uppercase tracking-[0.15em] px-3 py-1 rounded-full text-neutral-700">
-              {property.status || 'For Sale'}
-            </span>
-          )}
-        </div>
-
-        {/* Property Type Pill */}
-        <div className="absolute bottom-3.5 left-3.5 z-10">
-          <span className="bg-neutral-950/70 backdrop-blur-md text-white/90 text-[10px] font-medium tracking-wider uppercase px-3 py-1 rounded-full border border-white/10">
-            {property.propertyType || 'Modern Estate'}
-          </span>
-        </div>
+          </div>
+        )}
       </div>
 
       {/* Details Container */}
       <div className="p-5 md:p-6 flex flex-col flex-grow justify-between">
         <div>
-          {/* Location Line */}
-          <div className="flex items-center gap-1.5 text-neutral-400 text-xs font-normal mb-2">
-            <MapPin size={13} className="text-[#D4AF37]" />
-            <span className="truncate">{locationStr}</span>
+          {/* Location & Property Type */}
+          <div className="flex items-center justify-between text-neutral-400 text-xs font-normal mb-2 gap-2">
+            <div className="flex items-center gap-1.5 truncate">
+              <MapPin size={13} className="text-[#D4AF37] shrink-0" />
+              <span className="truncate">{locationStr}</span>
+            </div>
+            {property.propertyType && (
+              <span className="text-[10px] uppercase tracking-wider font-semibold text-[#D4AF37] shrink-0">
+                {property.propertyType}
+              </span>
+            )}
           </div>
 
           {/* Title */}

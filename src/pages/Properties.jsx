@@ -5,7 +5,7 @@ import { useSearchParams } from 'react-router-dom';
 import PropertyCard from '../components/PropertyCard';
 import { client } from '../client';
 import { FALLBACK_PROPERTIES } from '../data/fallbackProperties';
-import { Search, SlidersHorizontal, Sparkles, ArrowUpDown } from 'lucide-react';
+import { Search, SlidersHorizontal, ArrowUpDown } from 'lucide-react';
 
 const DEFAULT_CATEGORIES = ['All', 'Villas', 'Penthouses', 'Estates', 'Waterfront', 'Mansions', 'Sold'];
 
@@ -171,14 +171,8 @@ const Properties = ({ onInquire }) => {
           className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6"
         >
           <div>
-            <div className="flex items-center gap-3 mb-2">
-              <span className="text-[11px] uppercase tracking-[0.3em] text-[#D4AF37] font-semibold flex items-center gap-1.5">
-                <Sparkles size={13} /> Prime Residential Portfolio
-              </span>
-              <span className="text-neutral-300">•</span>
-              <span className="text-xs text-neutral-400 font-light">
-                {filteredAndSortedProperties.length} {filteredAndSortedProperties.length === 1 ? 'Residence' : 'Residences'} Available
-              </span>
+            <div className="text-xs text-neutral-400 font-light mb-1.5">
+              {filteredAndSortedProperties.length} {filteredAndSortedProperties.length === 1 ? 'Residence' : 'Residences'} Available
             </div>
             <h1 className="text-3xl md:text-5xl font-semibold tracking-tight text-neutral-900">
               Architectural Estates & Residences

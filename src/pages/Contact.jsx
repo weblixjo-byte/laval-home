@@ -47,18 +47,10 @@ const Contact = () => {
       <div className="luxury-container">
         <div className="max-w-6xl mx-auto">
           {/* Header */}
-          <div className="text-center mb-20 space-y-4">
-            <motion.div 
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-neutral-100 text-[#D4AF37] text-xs font-semibold uppercase tracking-[0.2em]"
-            >
-              <Compass size={13} /> Private Concierge & Advisory
-            </motion.div>
+          <div className="text-center mb-16 space-y-4">
             <motion.h1 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.15 }}
               className="text-4xl md:text-6xl font-semibold text-neutral-900 tracking-tight"
             >
               Contact Our Advisory Desk

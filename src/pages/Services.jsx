@@ -26,10 +26,6 @@ const Services = () => {
             transition={{ duration: 0.7 }}
             className="max-w-3xl mx-auto space-y-6"
           >
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-neutral-200 text-[#D4AF37] text-xs font-semibold uppercase tracking-[0.2em] shadow-xs">
-              <Compass size={13} /> Private Client Advisory
-            </div>
-
             <h1 className="text-4xl md:text-6xl font-semibold text-neutral-900 tracking-tight">
               Bespoke Real Estate Services
             </h1>
