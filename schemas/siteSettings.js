@@ -7,7 +7,7 @@ export default {
       name: 'title',
       title: 'Site Title',
       type: 'string',
-      initialValue: 'Laval Motors'
+      initialValue: 'Laval Luxury Homes'
     },
     {
       name: 'navbarLinks',
@@ -20,7 +20,7 @@ export default {
           title: 'Navbar Link',
           fields: [
             { name: 'title', title: 'Link Title', type: 'string' },
-            { name: 'path', title: 'Path (e.g. /inventory?brand=Ferrari or /about)', type: 'string' }
+            { name: 'path', title: 'Path (e.g. /properties?type=Villas or /about)', type: 'string' }
           ]
         }
       ],
@@ -39,17 +39,17 @@ export default {
       name: 'featuredCollection',
       title: 'Featured Collection (Home Page)',
       type: 'array',
-      of: [{ type: 'reference', to: [{ type: 'vehicle' }] }],
+      of: [{ type: 'reference', to: [{ type: 'property' }] }],
     },
     {
-      name: 'featuredBrands',
-      title: 'Featured Brands (Brands Section)',
+      name: 'featuredCategories',
+      title: 'Featured Categories & Types',
       type: 'array',
-      of: [{ type: 'reference', to: [{ type: 'brand' }] }],
+      of: [{ type: 'reference', to: [{ type: 'propertyType' }] }],
     },
     {
       name: 'homeHeritage',
-      title: 'Home Heritage Section',
+      title: 'Home Architectural Narrative',
       type: 'object',
       fields: [
         { name: 'title', title: 'Title', type: 'string' },
@@ -62,18 +62,18 @@ export default {
       title: 'Contact Information',
       type: 'object',
       fields: [
-        { name: 'generalEmail', title: 'General Email', type: 'string', initialValue: 'Help@lavalmotors.com' },
-        { name: 'directEmail', title: 'Direct Email', type: 'string', initialValue: 'Mike@lavalmotors.com' },
-        { name: 'salesPhone', title: 'Sales Phone', type: 'string', initialValue: '+1 (404) 790-8336' },
-        { name: 'servicePhone', title: 'Service Phone', type: 'string', initialValue: '+1 (229) 237-4046' },
-        { name: 'address', title: 'Showroom Address', type: 'string', initialValue: '1530 Iris Dr SW, Conyers Ga 30092' }
+        { name: 'generalEmail', title: 'General Inquiries', type: 'string', initialValue: 'concierge@lavalluxuryhomes.com' },
+        { name: 'directEmail', title: 'Private Advisory', type: 'string', initialValue: 'advisory@lavalluxuryhomes.com' },
+        { name: 'salesPhone', title: 'Acquisition Desk', type: 'string', initialValue: '+1 (404) 790-8336' },
+        { name: 'servicePhone', title: 'Client Services', type: 'string', initialValue: '+1 (229) 237-4046' },
+        { name: 'address', title: 'Office Address', type: 'string', initialValue: '110 Mansell Cir Suite 306, Roswell GA 30075' }
       ]
     },
     {
       name: 'footerText',
       title: 'Footer Copyright Text',
       type: 'string',
-      initialValue: '© 2026 Laval Motors. All rights reserved.'
+      initialValue: '© 2026 Laval Luxury Homes. All rights reserved.'
     }
   ]
-}
+};

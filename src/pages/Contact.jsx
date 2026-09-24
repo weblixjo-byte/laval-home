@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion'; // eslint-disable-line no-unused-vars
+// eslint-disable-next-line no-unused-vars
+import { motion } from 'framer-motion';
+import { MapPin, Phone, Mail, Compass, Send, CheckCircle2 } from 'lucide-react';
 
-// TODO: Replace with the Access Key from web3forms.com
 const WEB3FORMS_ACCESS_KEY = "d7f8311f-fb43-4cdd-96ed-afcf8c00bba3";
 
 const Contact = () => {
@@ -17,7 +18,7 @@ const Contact = () => {
     const formData = new FormData(e.target);
     formData.append("access_key", WEB3FORMS_ACCESS_KEY);
     formData.append("subject", `New Private Inquiry from Contact Page`);
-    formData.append("from_name", "Laval Motors Website");
+    formData.append("from_name", "Laval Luxury Homes Website");
 
     try {
       const response = await fetch("https://api.web3forms.com/submit", {
@@ -32,96 +33,109 @@ const Contact = () => {
         e.target.reset();
         setTimeout(() => setSubmitted(false), 5000);
       } else {
-        setError("Something went wrong. Please try again.");
+        setError("Unable to submit message. Please contact our advisory office directly.");
       }
     } catch {
-      setError("Network error. Please try again later.");
+      setError("Network error. Please verify your connection.");
     } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-white pt-32 pb-32">
+    <div className="min-h-screen bg-white pt-28 md:pt-36 pb-32 font-sans">
       <div className="luxury-container">
         <div className="max-w-6xl mx-auto">
           {/* Header */}
-          <div className="text-center mb-24">
-            <motion.h2 
-              initial={{ opacity: 0, y: 20 }}
+          <div className="text-center mb-20 space-y-4">
+            <motion.div 
+              initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
-              className="text-[10px] uppercase tracking-[0.5em] text-luxury-accent font-bold mb-6"
+              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-neutral-100 text-[#D4AF37] text-xs font-semibold uppercase tracking-[0.2em]"
             >
-              Customer Service
-            </motion.h2>
+              <Compass size={13} /> Private Concierge & Advisory
+            </motion.div>
             <motion.h1 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-              className="text-5xl md:text-8xl font-serif text-luxury-black mb-8"
+              transition={{ delay: 0.15 }}
+              className="text-4xl md:text-6xl font-semibold text-neutral-900 tracking-tight"
             >
-              Contact <span className="italic">Us</span>
+              Contact Our Advisory Desk
             </motion.h1>
-            <motion.div 
-              initial={{ scaleX: 0 }}
-              animate={{ scaleX: 1 }}
-              transition={{ delay: 0.4, duration: 1 }}
-              className="w-24 h-px bg-luxury-accent mx-auto mb-8"
-            ></motion.div>
+            <motion.p 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.3 }}
+              className="text-sm md:text-base text-neutral-500 font-light max-w-xl mx-auto leading-relaxed"
+            >
+              Connect discreetly with our Private Client Directors for viewing appointments, off-market portfolio access, or estate representation.
+            </motion.p>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 items-start">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-start">
             {/* Contact Info */}
             <motion.div 
               initial={{ opacity: 0, x: -30 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.6 }}
-              className="space-y-16"
+              transition={{ delay: 0.4 }}
+              className="space-y-12 text-left"
             >
-              <div>
-                <h3 className="text-xl font-serif mb-8 text-luxury-black">Global HQ & Showroom</h3>
-                <div className="space-y-4 text-gray-500 font-light leading-relaxed">
-                  <a 
-                    href="https://www.google.com/maps/search/?api=1&query=110+Mansell+Cir+Suite+306,+Roswell,+GA+30075" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="block hover:text-luxury-accent transition-colors"
-                  >
-                    <p className="text-lg">110 Mansell Cir Suite 306</p>
-                    <p className="text-lg">Roswell Ga 30075</p>
-                  </a>
-                  <div className="pt-4">
-                    <a href="https://www.google.com/maps/search/?api=1&query=110+Mansell+Cir+Suite+306,+Roswell,+GA+30075" target="_blank" rel="noopener noreferrer" className="text-xs uppercase tracking-widest border-b border-luxury-accent pb-1 text-luxury-black font-bold">Get Directions</a>
+              <div className="p-8 rounded-2xl bg-neutral-50 border border-neutral-200/70 space-y-4 shadow-xs">
+                <div className="flex items-center gap-2.5 text-[#D4AF37]">
+                  <MapPin size={18} />
+                  <span className="text-xs uppercase tracking-widest font-semibold text-neutral-900">Advisory Headquarters</span>
+                </div>
+                <div className="space-y-1 text-sm text-neutral-600 font-light">
+                  <p className="font-medium text-neutral-900">110 Mansell Cir Suite 306</p>
+                  <p>Roswell GA 30075</p>
+                </div>
+                <a 
+                  href="https://www.google.com/maps/search/?api=1&query=110+Mansell+Cir+Suite+306,+Roswell,+GA+30075" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="inline-block text-xs uppercase tracking-wider text-[#D4AF37] font-semibold border-b border-[#D4AF37] pb-0.5 hover:text-[#C5A059] transition-colors"
+                >
+                  Get Directions →
+                </a>
+              </div>
+
+              <div className="space-y-6">
+                <h3 className="text-lg font-semibold text-neutral-900">Direct Inquiries</h3>
+                
+                <div className="space-y-4 text-xs font-light">
+                  <div className="flex justify-between items-center py-3 border-b border-neutral-100">
+                    <span className="uppercase tracking-wider text-neutral-400 font-medium">Acquisition Desk</span>
+                    <a href="tel:+14047908336" className="text-neutral-900 font-medium hover:text-[#D4AF37] transition-colors flex items-center gap-2">
+                      <Phone size={13} className="text-[#D4AF37]" /> +1 (404) 790-8336
+                    </a>
+                  </div>
+
+                  <div className="flex justify-between items-center py-3 border-b border-neutral-100">
+                    <span className="uppercase tracking-wider text-neutral-400 font-medium">Private Advisory</span>
+                    <a href="tel:+12292374046" className="text-neutral-900 font-medium hover:text-[#D4AF37] transition-colors flex items-center gap-2">
+                      <Phone size={13} className="text-[#D4AF37]" /> +1 (229) 237-4046
+                    </a>
+                  </div>
+
+                  <div className="flex justify-between items-center py-3 border-b border-neutral-100">
+                    <span className="uppercase tracking-wider text-neutral-400 font-medium">Concierge Email</span>
+                    <a href="mailto:concierge@lavalluxuryhomes.com" className="text-neutral-900 font-medium hover:text-[#D4AF37] transition-colors flex items-center gap-2">
+                      <Mail size={13} className="text-[#D4AF37]" /> concierge@lavalluxuryhomes.com
+                    </a>
+                  </div>
+
+                  <div className="flex justify-between items-center py-3 border-b border-neutral-100">
+                    <span className="uppercase tracking-wider text-neutral-400 font-medium">Confidential Advisory</span>
+                    <a href="mailto:advisory@lavalluxuryhomes.com" className="text-neutral-900 font-medium hover:text-[#D4AF37] transition-colors flex items-center gap-2">
+                      <Mail size={13} className="text-[#D4AF37]" /> advisory@lavalluxuryhomes.com
+                    </a>
                   </div>
                 </div>
               </div>
 
-              <div className="space-y-8">
-                <h3 className="text-xl font-serif text-luxury-black">Connect With Us</h3>
-                <div className="space-y-6">
-                  <div className="flex justify-between items-end border-b border-gray-100 pb-4">
-                    <span className="text-[10px] uppercase tracking-widest text-gray-400 font-bold">General Inquiries</span>
-                    <span className="text-lg text-luxury-black">Help@lavalmotors.com</span>
-                  </div>
-                  <div className="flex justify-between items-end border-b border-gray-100 pb-4">
-                    <span className="text-[10px] uppercase tracking-widest text-gray-400 font-bold">Direct Inquiry</span>
-                    <span className="text-lg text-luxury-black">Mike@lavalmotors.com</span>
-                  </div>
-                  <div className="flex justify-between items-end border-b border-gray-100 pb-4">
-                    <span className="text-[10px] uppercase tracking-widest text-gray-400 font-bold">Sales Desk</span>
-                    <a href="tel:+14047908336" className="text-lg text-luxury-black hover:text-luxury-accent transition-colors">+1 (404) 790-8336</a>
-                  </div>
-                  <div className="flex justify-between items-end border-b border-gray-100 pb-4">
-                    <span className="text-[10px] uppercase tracking-widest text-gray-400 font-bold">Service Atelier</span>
-                    <a href="tel:+12292374046" className="text-lg text-luxury-black hover:text-luxury-accent transition-colors">+1 (229) 237-4046</a>
-                  </div>
-                </div>
-              </div>
-
-              <div className="pt-8">
-                <p className="text-sm text-gray-400 italic serif">
-                  Our specialists are available for private consultations by appointment only.
-                </p>
+              <div className="p-4 rounded-xl bg-amber-50/60 border border-amber-200/70 text-xs text-amber-950/80 font-light leading-relaxed">
+                Private viewings and architectural consultations are conducted strictly by advance appointment to safeguard client privacy.
               </div>
             </motion.div>
 
@@ -129,65 +143,88 @@ const Contact = () => {
             <motion.div 
               initial={{ opacity: 0, x: 30 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.8 }}
-              className="bg-gray-50 p-12 md:p-16 rounded-sm border border-gray-100 shadow-sm"
+              transition={{ delay: 0.5 }}
+              className="bg-neutral-50 p-8 md:p-12 rounded-2xl border border-neutral-200/80 shadow-md text-left"
             >
-              <h3 className="text-2xl font-serif mb-12 text-luxury-black">Send a Private Inquiry</h3>
+              <h3 className="text-xl font-semibold mb-6 text-neutral-900">Request a Private Briefing</h3>
+              
               {submitted ? (
-                <div className="py-20 text-center">
-                  <div className="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-2xl mb-6 mx-auto">✓</div>
-                  <h4 className="text-xl font-serif mb-2">Message Sent</h4>
-                  <p className="text-gray-500 text-sm italic">Thank you for reaching out. Our team will contact you shortly.</p>
+                <div className="py-16 text-center space-y-3">
+                  <div className="w-14 h-14 bg-amber-100 text-[#D4AF37] rounded-full flex items-center justify-center text-2xl mx-auto shadow-xs">✓</div>
+                  <h4 className="text-lg font-semibold text-neutral-900">Message Received</h4>
+                  <p className="text-xs text-neutral-500 font-light leading-relaxed max-w-xs mx-auto">
+                    Thank you for reaching out. A Private Client Director will contact you discreetly within one business day.
+                  </p>
                 </div>
               ) : (
-                <form onSubmit={handleSubmit} className="space-y-10">
-                  <div className="relative">
+                <form onSubmit={handleSubmit} className="space-y-5">
+                  <div>
+                    <label className="text-[10px] uppercase tracking-wider font-medium text-neutral-500 block mb-1">Full Legal Name *</label>
                     <input 
                       type="text" 
                       name="name"
                       required
-                      className="w-full bg-transparent border-b border-gray-300 py-3 outline-none focus:border-luxury-accent transition-colors text-sm font-light placeholder:text-gray-400 uppercase tracking-widest" 
-                      placeholder="FULL NAME"
+                      className="w-full bg-white border border-neutral-200 rounded-xl px-4 py-3 outline-none focus:border-[#D4AF37] text-xs font-light text-neutral-900" 
+                      placeholder="e.g. Harrison Vance"
                     />
                   </div>
-                  <div className="relative">
-                    <input 
-                      type="email" 
-                      name="email"
-                      required
-                      className="w-full bg-transparent border-b border-gray-300 py-3 outline-none focus:border-luxury-accent transition-colors text-sm font-light placeholder:text-gray-400 uppercase tracking-widest" 
-                      placeholder="EMAIL ADDRESS"
-                    />
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="text-[10px] uppercase tracking-wider font-medium text-neutral-500 block mb-1">Email Address *</label>
+                      <input 
+                        type="email" 
+                        name="email"
+                        required
+                        className="w-full bg-white border border-neutral-200 rounded-xl px-4 py-3 outline-none focus:border-[#D4AF37] text-xs font-light text-neutral-900" 
+                        placeholder="vance@private.com"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-[10px] uppercase tracking-wider font-medium text-neutral-500 block mb-1">Phone Number *</label>
+                      <input 
+                        type="tel" 
+                        name="phone"
+                        required
+                        className="w-full bg-white border border-neutral-200 rounded-xl px-4 py-3 outline-none focus:border-[#D4AF37] text-xs font-light text-neutral-900" 
+                        placeholder="+1 (404) 555-0199"
+                      />
+                    </div>
                   </div>
-                  <div className="relative">
+
+                  <div>
+                    <label className="text-[10px] uppercase tracking-wider font-medium text-neutral-500 block mb-1">Nature of Inquiry</label>
                     <select 
                       name="interest"
-                      className="w-full bg-transparent border-b border-gray-300 py-3 outline-none focus:border-luxury-accent transition-colors text-[10px] uppercase tracking-widest font-bold text-gray-400 appearance-none"
+                      className="w-full bg-white border border-neutral-200 rounded-xl px-4 py-3 outline-none focus:border-[#D4AF37] text-xs font-medium text-neutral-800 appearance-none cursor-pointer"
                     >
-                      <option value="General">Select Interest</option>
-                      <option value="Purchase">Vehicle Purchase</option>
-                      <option value="Sell">Sell Your Vehicle</option>
-                      <option value="Service">Atelier Service</option>
-                      <option value="Press">Press Inquiry</option>
+                      <option value="Private Tour Request">Schedule Private Property Tour</option>
+                      <option value="Property Acquisition Inquiry">Property Acquisition Advisory</option>
+                      <option value="List / Sell an Estate">Estate Representation & Listing Valuation</option>
+                      <option value="Mortgage & Financing">Luxury Mortgage & Liquidity Structuring</option>
+                      <option value="Off-Market Portfolio">Access Off-Market Portfolio</option>
                     </select>
                   </div>
-                  <div className="relative">
+
+                  <div>
+                    <label className="text-[10px] uppercase tracking-wider font-medium text-neutral-500 block mb-1">Message / Consultation Details *</label>
                     <textarea 
                       name="message"
                       required
                       rows="4" 
-                      className="w-full bg-transparent border-b border-gray-300 py-3 outline-none focus:border-luxury-accent transition-colors text-sm font-light placeholder:text-gray-400 resize-none uppercase tracking-widest" 
-                      placeholder="HOW CAN WE ASSIST YOU?"
+                      className="w-full bg-white border border-neutral-200 rounded-xl px-4 py-3 outline-none focus:border-[#D4AF37] text-xs font-light text-neutral-900 resize-none" 
+                      placeholder="Please indicate property of interest, preferred appointment schedule, or advisory scope..."
                     ></textarea>
                   </div>
                   
-                  {error && <p className="text-xs text-red-500 italic">{error}</p>}
+                  {error && <p className="text-xs text-red-600 font-medium">{error}</p>}
 
                   <button 
                     disabled={isSubmitting}
-                    className="w-full py-5 bg-luxury-black text-white text-[10px] uppercase tracking-[0.4em] font-bold hover:bg-luxury-accent transition-all duration-500 shadow-xl disabled:opacity-50"
+                    className="w-full py-4 bg-neutral-900 text-white text-xs uppercase tracking-[0.15em] font-semibold rounded-xl hover:bg-[#D4AF37] transition-all duration-300 shadow-sm disabled:opacity-50 flex items-center justify-center gap-2"
                   >
-                    {isSubmitting ? 'Sending...' : 'Send Message'}
+                    <Send size={13} />
+                    <span>{isSubmitting ? 'Transmitting...' : 'Send Confidential Inquiry'}</span>
                   </button>
                 </form>
               )}
@@ -195,11 +232,8 @@ const Contact = () => {
           </div>
         </div>
       </div>
-
     </div>
   );
 };
 
 export default Contact;
-
-

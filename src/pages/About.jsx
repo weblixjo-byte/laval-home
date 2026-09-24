@@ -3,53 +3,60 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { 
-  Diamond, 
-  User, 
-  Handshake, 
-  ShieldCheck 
+  Building2, 
+  ShieldCheck, 
+  Sparkles, 
+  Award, 
+  Compass,
+  ArrowRight
 } from 'lucide-react';
 
-// Using the newly generated high-quality images
 import aboutExterior from '../assets/about_exterior.jpeg';
+import aboutInterior from '../assets/about_interior.jpg';
 
 const About = () => {
   return (
-    <div className="min-h-screen bg-white pt-24 md:pt-32">
+    <div className="min-h-screen bg-white pt-28 md:pt-36 font-sans">
       {/* Hero Section */}
       <section className="luxury-container mb-24 md:mb-32">
-        <div className="flex flex-col lg:flex-row gap-12 lg:gap-24 items-center">
+        <div className="flex flex-col lg:flex-row gap-12 lg:gap-20 items-center">
           <motion.div 
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
-            className="lg:w-1/2 space-y-8"
+            transition={{ duration: 0.7 }}
+            className="lg:w-1/2 space-y-6 text-left"
           >
-            <div className="flex items-center gap-4">
-              <div className="w-8 h-px bg-luxury-accent"></div>
-              <span className="text-[10px] uppercase tracking-[0.5em] text-gray-400 font-bold">About Us</span>
+            <div className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.25em] text-[#D4AF37] font-semibold">
+              <Compass size={14} /> Our Heritage & Philosophy
             </div>
             
-            <h1 className="text-4xl md:text-6xl font-serif text-luxury-black leading-tight">
-              About Us
+            <h1 className="text-4xl md:text-6xl font-semibold text-neutral-900 tracking-tight leading-tight">
+              Curating Extraordinary Architectural Living
             </h1>
             
-            <div className="w-16 h-px bg-gray-200"></div>
+            <div className="w-16 h-0.5 bg-[#D4AF37] rounded-full"></div>
             
-            <div className="space-y-6 text-gray-500 font-light leading-relaxed text-lg max-w-xl">
+            <div className="space-y-4 text-neutral-600 font-light leading-relaxed text-base">
               <p>
-                At Laval Motors, we are committed to providing quality vehicles, honest service, and a smooth car-buying experience. Our goal is to help every customer find the right vehicle at the right price with confidence and ease.
+                At Laval Luxury Homes, we believe a residence is not merely an asset—it is the ultimate expression of architecture, art, and personal sanctuary. Our boutique real estate advisory was established to serve discerning individuals who value design provenance, absolute privacy, and meticulous attention to detail.
               </p>
               <p>
-                From reliable daily drivers to stylish SUVs and trucks, we carefully select vehicles that deliver value and dependability. At Laval Motors, customer satisfaction always comes first.
+                Headquartered in Roswell, Georgia, we represent premier architectural estates, bespoke waterfront villas, and modern masterworks across the Southeast and exclusive global destinations. From private acquisition negotiations to off-market listing placement, our clients receive institutional-grade representation with a bespoke personal touch.
               </p>
             </div>
             
-            <div className="pt-4">
+            <div className="pt-4 flex items-center gap-4">
               <Link 
-                to="/inventory" 
-                className="inline-block border border-gray-900 px-8 py-4 text-[10px] uppercase tracking-[0.3em] font-bold hover:bg-luxury-black hover:text-white transition-all duration-300"
+                to="/properties" 
+                className="bg-neutral-900 text-white px-7 py-3.5 rounded-full text-xs uppercase tracking-[0.15em] font-semibold hover:bg-[#D4AF37] transition-all duration-300 shadow-sm"
               >
-                Explore Our Inventory
+                View Portfolio
+              </Link>
+              <Link 
+                to="/contact" 
+                className="border border-neutral-300 text-neutral-900 px-7 py-3.5 rounded-full text-xs uppercase tracking-[0.15em] font-semibold hover:border-neutral-900 transition-colors"
+              >
+                Consult Advisory
               </Link>
             </div>
           </motion.div>
@@ -57,14 +64,14 @@ const About = () => {
           <motion.div 
             initial={{ opacity: 0, x: 30 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
+            transition={{ duration: 0.7 }}
             className="lg:w-1/2"
           >
-            <div className="relative">
+            <div className="relative rounded-2xl overflow-hidden shadow-2xl border border-neutral-100">
               <img 
                 src={aboutExterior} 
-                alt="Laval Showroom Exterior" 
-                className="w-full h-[400px] md:h-[600px] object-cover shadow-2xl rounded-sm"
+                alt="Laval Luxury Homes Headquarters" 
+                className="w-full h-[420px] md:h-[560px] object-cover"
                 loading="lazy"
                 decoding="async"
               />
@@ -74,54 +81,55 @@ const About = () => {
       </section>
 
       {/* Values Section */}
-      <section className="py-24 md:py-32 bg-[#FBFBFB] border-t border-b border-gray-100">
+      <section className="py-24 md:py-32 bg-neutral-50/60 border-t border-neutral-100">
         <div className="luxury-container">
-          <div className="text-center mb-20 space-y-4">
-            <div className="flex justify-center items-center gap-4">
-              <div className="w-8 h-px bg-luxury-accent"></div>
-              <span className="text-[10px] uppercase tracking-[0.5em] text-gray-400 font-bold">Our Values</span>
-              <div className="w-8 h-px bg-luxury-accent"></div>
-            </div>
+          <div className="text-center mb-16 space-y-3">
+            <span className="text-xs uppercase tracking-[0.3em] text-[#D4AF37] font-semibold block">
+              Founding Principles
+            </span>
+            <h2 className="text-3xl md:text-5xl font-semibold text-neutral-900 tracking-tight">
+              The Standards We Live By
+            </h2>
           </div>
           
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
             {[
               { 
-                title: 'Excellence', 
-                desc: 'We are committed to offering the finest vehicles and service.', 
-                Icon: Diamond 
+                title: 'Architectural Provenance', 
+                desc: 'We curate properties celebrated for structural innovation, harmonious materials, and visionary craftsmanship.', 
+                Icon: Building2 
               },
               { 
-                title: 'Integrity', 
-                desc: 'Honesty and transparency guide every relationship we build.', 
-                Icon: User 
-              },
-              { 
-                title: 'Passion', 
-                desc: 'We are car enthusiasts dedicated to sharing our passion with you.', 
-                Icon: Handshake 
-              },
-              { 
-                title: 'Trust', 
-                desc: 'Your satisfaction and confidence drive everything we do.', 
+                title: 'Discreet Representation', 
+                desc: 'Client confidentiality is sacred. Every inquiry and private off-market negotiation is protected with ironclad discretion.', 
                 Icon: ShieldCheck 
+              },
+              { 
+                title: 'Institutional Certainty', 
+                desc: 'From title vetting and zoning analysis to bespoke mortgage underwriting, we deliver seamless transactions.', 
+                Icon: Award 
+              },
+              { 
+                title: 'White-Glove Advisory', 
+                desc: 'Dedicated private client directors guiding every phase of property acquisition, staging, and transition.', 
+                Icon: Sparkles 
               }
             ].map((value, idx) => (
               <motion.div 
                 key={idx}
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 15 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: idx * 0.1, duration: 0.5 }}
+                transition={{ delay: idx * 0.1, duration: 0.4 }}
                 viewport={{ once: true }}
-                className="text-center space-y-6 px-4"
+                className="bg-white p-8 rounded-2xl border border-neutral-200/70 shadow-xs hover:shadow-lg transition-all text-left"
               >
-                <div className="w-16 h-16 mx-auto flex items-center justify-center text-gray-400">
-                  <value.Icon size={40} strokeWidth={1} />
+                <div className="w-12 h-12 rounded-xl bg-amber-50/70 text-[#D4AF37] flex items-center justify-center mb-6 border border-amber-200/50">
+                  <value.Icon size={22} />
                 </div>
-                <h4 className="text-[11px] uppercase tracking-[0.25em] font-bold text-luxury-black">
+                <h4 className="text-sm uppercase tracking-wider font-semibold text-neutral-900 mb-2">
                   {value.title}
                 </h4>
-                <p className="text-sm text-gray-500 font-light leading-relaxed">
+                <p className="text-xs text-neutral-500 font-light leading-relaxed">
                   {value.desc}
                 </p>
               </motion.div>
@@ -130,7 +138,65 @@ const About = () => {
         </div>
       </section>
 
+      {/* Narrative Section with Interior Image */}
+      <section className="py-24 luxury-container">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+          <div className="rounded-2xl overflow-hidden shadow-2xl border border-neutral-100 h-[450px]">
+            <img 
+              src={aboutInterior} 
+              alt="Laval Luxury Homes Advisory Interior" 
+              className="w-full h-full object-cover" 
+              loading="lazy" 
+            />
+          </div>
+          <div className="space-y-6 text-left">
+            <span className="text-xs uppercase tracking-[0.25em] text-[#D4AF37] font-semibold block">
+              Private Client Experience
+            </span>
+            <h3 className="text-3xl md:text-4xl font-semibold text-neutral-900 tracking-tight leading-tight">
+              Beyond Traditional Brokerage
+            </h3>
+            <p className="text-sm text-neutral-600 font-light leading-relaxed">
+              Standard real estate firms focus on volume; Laval Luxury Homes focuses on perfection. We intentionally maintain a strictly curated inventory so our advisors can devote undivided strategic focus to every estate and client relationship.
+            </p>
+            <p className="text-sm text-neutral-600 font-light leading-relaxed">
+              Whether you are acquiring a waterfront estate on Lake Lanier, a skyline penthouse in Atlanta, or a serene sanctuary in Roswell, we provide complete market transparency, architectural expertise, and tailored financial structuring.
+            </p>
+            <div className="pt-2">
+              <Link 
+                to="/services" 
+                className="inline-flex items-center text-xs uppercase tracking-wider font-semibold text-neutral-900 hover:text-[#D4AF37] transition-colors"
+              >
+                <span>Explore Client Advisory Services</span>
+                <ArrowRight size={14} className="ml-2" />
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
 
+      {/* Advisory Office Callout */}
+      <section className="py-16 bg-neutral-950 text-white">
+        <div className="luxury-container text-center max-w-2xl mx-auto space-y-4">
+          <span className="text-[11px] uppercase tracking-[0.3em] text-[#D4AF37] font-semibold">
+            Private Consultation By Appointment
+          </span>
+          <h3 className="text-2xl md:text-3xl font-semibold tracking-tight">
+            Schedule a Private Portfolio Review
+          </h3>
+          <p className="text-xs text-neutral-400 font-light leading-relaxed">
+            Our Private Client Directors are available for in-person consultations at our Roswell advisory office or via encrypted digital briefing.
+          </p>
+          <div className="pt-4">
+            <Link 
+              to="/contact" 
+              className="bg-[#D4AF37] text-neutral-950 px-8 py-3.5 rounded-full text-xs uppercase tracking-[0.15em] font-semibold hover:bg-[#C5A059] transition-all inline-block shadow-md"
+            >
+              Contact Concierge
+            </Link>
+          </div>
+        </div>
+      </section>
     </div>
   );
 };

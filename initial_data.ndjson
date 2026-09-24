@@ -1,17 +1,10 @@
-{"_type": "category", "_id": "cat-hypercar", "title": "Hypercar"}
-{"_type": "category", "_id": "cat-supercar", "title": "Supercar"}
-{"_type": "category", "_id": "cat-classic", "title": "Classic"}
-{"_type": "category", "_id": "cat-luxury", "title": "Luxury"}
-{"_type": "category", "_id": "cat-suv", "title": "SUV"}
-{"_type": "brand", "_id": "brand-ferrari", "name": "Ferrari"}
-{"_type": "brand", "_id": "brand-lamborghini", "name": "Lamborghini"}
-{"_type": "brand", "_id": "brand-porsche", "name": "Porsche"}
-{"_type": "brand", "_id": "brand-bugatti", "name": "Bugatti"}
-{"_type": "brand", "_id": "brand-rolls", "name": "Rolls-Royce"}
-{"_type": "brand", "_id": "brand-mclaren", "name": "McLaren"}
-{"_type": "brand", "_id": "brand-bentley", "name": "Bentley"}
-{"_type": "brand", "_id": "brand-aston", "name": "Aston Martin"}
-{"_type": "siteSettings", "_id": "siteSettings", "title": "Laval Luxury Motors", "footerText": "© 2026 LAVAL LUXURY MOTORS"}
-{"_type": "pageAbout", "_id": "pageAbout", "title": "The Art of Driving", "subtitle": "A legacy of automotive excellence"}
-{"_type": "pageFinancing", "_id": "pageFinancing", "title": "Tailored Financing", "subtitle": "Bespoke financial solutions"}
-{"_type": "pageServices", "_id": "pageServices", "title": "Mastery & Preservation", "subtitle": "Beyond the showroom"}
+{"_type": "propertyType", "_id": "type-villas", "name": "Villas", "order": 1, "slug": {"_type": "slug", "current": "villas"}}
+{"_type": "propertyType", "_id": "type-penthouses", "name": "Penthouses", "order": 2, "slug": {"_type": "slug", "current": "penthouses"}}
+{"_type": "propertyType", "_id": "type-estates", "name": "Estates", "order": 3, "slug": {"_type": "slug", "current": "estates"}}
+{"_type": "propertyType", "_id": "type-waterfront", "name": "Waterfront", "order": 4, "slug": {"_type": "slug", "current": "waterfront"}}
+{"_type": "propertyType", "_id": "type-mansions", "name": "Mansions", "order": 5, "slug": {"_type": "slug", "current": "mansions"}}
+{"_type": "propertyType", "_id": "type-townhouses", "name": "Townhouses", "order": 6, "slug": {"_type": "slug", "current": "townhouses"}}
+{"_type": "siteSettings", "_id": "siteSettings", "title": "Laval Luxury Homes", "footerText": "© 2026 LAVAL LUXURY HOMES"}
+{"_type": "pageAbout", "_id": "pageAbout", "title": "The Art of Living", "subtitle": "A legacy of architectural curation and private representation"}
+{"_type": "pageFinancing", "_id": "pageFinancing", "title": "Mortgage & Acquisition Advisory", "subtitle": "Bespoke liquidity and financing solutions for prime residences"}
+{"_type": "pageServices", "_id": "pageServices", "title": "Private Client Services", "subtitle": "Discreet real estate advisory and global syndication"}

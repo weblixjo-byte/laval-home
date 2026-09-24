@@ -2,10 +2,11 @@ import React, { useState, useEffect, Suspense, lazy } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
-import CarDetailsModal from './components/CarDetailsModal';
+import PropertyDetailsModal from './components/PropertyDetailsModal';
 
-// Lazy load pages for "Insane Speed"
+// Lazy load pages for optimal performance
 const Home = lazy(() => import('./pages/Home'));
+const Properties = lazy(() => import('./pages/Properties'));
 const Inventory = lazy(() => import('./pages/Inventory'));
 const About = lazy(() => import('./pages/About'));
 const Contact = lazy(() => import('./pages/Contact'));
@@ -15,31 +16,29 @@ const Services = lazy(() => import('./pages/Services'));
 const StudioPage = lazy(() => import('./pages/StudioPage'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 
-// High-end loading fallback
+// High-end modern loading fallback
 const PageLoader = () => (
-  <div className="h-screen w-full flex items-center justify-center bg-white">
-    <div className="w-12 h-12 border-2 border-luxury-accent border-t-transparent rounded-full animate-spin"></div>
+  <div className="h-screen w-full flex flex-col items-center justify-center bg-white font-sans">
+    <div className="w-10 h-10 border-2 border-[#D4AF37] border-t-transparent rounded-full animate-spin mb-3"></div>
+    <span className="text-[11px] uppercase tracking-[0.25em] text-neutral-400 font-medium">Laval Luxury Homes</span>
   </div>
 );
 
 function App() {
   const [isInquiryOpen, setIsInquiryOpen] = useState(false);
-  const [selectedCar, setSelectedCar] = useState(null);
+  const [selectedProperty, setSelectedProperty] = useState(null);
   const location = useLocation();
 
-  const openInquiry = (car) => {
-    setSelectedCar(car);
+  const openInquiry = (property) => {
+    setSelectedProperty(property);
     setIsInquiryOpen(true);
   };
 
   const isStudio = location.pathname.startsWith('/studio');
   
-  // Scroll to top on route change and initial mount
+  // Scroll to top on route change
   useEffect(() => {
-    // Immediate scroll
     window.scrollTo(0, 0);
-    
-    // Backup scroll for slower loading content
     const timeoutId = setTimeout(() => {
       window.scrollTo({
         top: 0,
@@ -52,12 +51,13 @@ function App() {
   }, [location.pathname]);
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen font-sans bg-white text-neutral-900 selection:bg-amber-100 selection:text-amber-900">
       {!isStudio && <Navbar />}
       <main className="flex-grow">
         <Suspense fallback={<PageLoader />}>
           <Routes>
             <Route path="/" element={<Home onInquire={openInquiry} />} />
+            <Route path="/properties" element={<Properties onInquire={openInquiry} />} />
             <Route path="/inventory" element={<Inventory onInquire={openInquiry} />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
@@ -71,10 +71,10 @@ function App() {
       </main>
       {!isStudio && <Footer />}
 
-      <CarDetailsModal 
+      <PropertyDetailsModal 
         isOpen={isInquiryOpen} 
         onClose={() => setIsInquiryOpen(false)} 
-        car={selectedCar} 
+        property={selectedProperty} 
       />
     </div>
   );

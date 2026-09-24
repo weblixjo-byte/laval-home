@@ -1,21 +1,11 @@
-# Laval Luxury Motors
-Professional luxury car dealership platform.
+# Laval Luxury Homes
 
-<!-- Deployment Trigger: Validated Routing -->
+Ultra-modern luxury real estate platform and private client advisory website.
 
-# React + Vite
-
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Features
+- **Modern Architecture**: Built with React 19, Vite, Tailwind CSS v4, and Sanity Studio CMS (`/studio`).
+- **Unified Typography**: Globally powered by **IBM Plex Sans** (clean, contemporary, zero serifs).
+- **Soft Modern UI/UX**: Soft rounded corners (`rounded-xl` and `rounded-2xl`), delicate glassmorphism, subtle borders, and refined metallic gold accents (`#D4AF37`).
+- **Real Estate CMS**: Sanity schemas tailored for properties (title, type, pricing, location, specs, features, high-res images, and architectural narratives).
+- **Mortgage & Financing Pre-Approval**: 5-step digital application with URL-safe Base64 compressed serialization and bank-ready 1-page A4 print layout.
+- **Embedded Studio**: Seamless Sanity Studio management integrated directly at `/studio`.
