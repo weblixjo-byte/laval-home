@@ -1,13 +1,6 @@
 import { defineConfig, buildLegacyTheme } from 'sanity';
 import { structureTool } from 'sanity/structure';
 import property from './schemas/property';
-import propertyType from './schemas/propertyType';
-import review from './schemas/review';
-import financeApplication from './schemas/financeApplication';
-import siteSettings from './schemas/siteSettings';
-import pageAbout from './schemas/pageAbout';
-import pageFinancing from './schemas/pageFinancing';
-import pageServices from './schemas/pageServices';
 
 const props = {
   '--laval-white': '#ffffff',
@@ -52,7 +45,7 @@ export const myTheme = buildLegacyTheme({
 
 export default defineConfig({
   name: 'default',
-  title: 'Laval Luxury Homes | Admin Desk',
+  title: 'Laval Luxury Homes | Properties Manager',
   theme: myTheme,
 
   projectId: 'g983wkxj',
@@ -65,15 +58,7 @@ export default defineConfig({
         S.list()
           .title('Portfolio Management')
           .items([
-            S.documentTypeListItem('property').title('Properties (Inventory)'),
-            S.documentTypeListItem('propertyType').title('Property Types & Locations'),
-            S.documentTypeListItem('financeApplication').title('Mortgage Pre-Approvals'),
-            S.documentTypeListItem('review').title('Testimonials'),
-            S.divider(),
-            S.documentTypeListItem('siteSettings').title('Site Settings'),
-            S.documentTypeListItem('pageAbout').title('About Page Settings'),
-            S.documentTypeListItem('pageServices').title('Services Page Settings'),
-            S.documentTypeListItem('pageFinancing').title('Mortgage Page Settings'),
+            S.documentTypeListItem('property').title('Properties (Add / Edit / Sold)'),
           ]),
     }),
   ],
@@ -81,13 +66,6 @@ export default defineConfig({
   schema: {
     types: [
       property,
-      propertyType,
-      financeApplication,
-      review,
-      siteSettings,
-      pageAbout,
-      pageServices,
-      pageFinancing,
     ],
   },
 });

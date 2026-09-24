@@ -29,17 +29,7 @@ const Properties = ({ onInquire }) => {
     const fetchData = async () => {
       try {
         setIsLoading(true);
-        // Fetch categories
-        const categoriesQuery = `*[_type == "propertyType"] | order(order asc, name asc) { name }`;
-        const categoriesData = await client.fetch(categoriesQuery);
-        if (categoriesData && categoriesData.length > 0) {
-          const uniqueCats = ['All', ...new Set(categoriesData.map((c) => c.name.trim()))];
-          setCategories(uniqueCats);
-        } else {
-          setCategories([]);
-        }
-
-        // Fetch properties
+        // Fetch properties strictly from Sanity
         const propertiesQuery = `*[_type == "property"] | order(_createdAt desc) {
           "id": _id,
           title,
@@ -71,8 +61,16 @@ const Properties = ({ onInquire }) => {
         const propertiesData = await client.fetch(propertiesQuery);
         if (propertiesData && propertiesData.length > 0) {
           setAllProperties(propertiesData);
+          const uniqueTypes = [...new Set(propertiesData.map((p) => p.propertyType).filter(Boolean))];
+          const hasSold = propertiesData.some((p) => p.isSold || p.status === 'Sold / Leased');
+          if (uniqueTypes.length > 0 || hasSold) {
+            setCategories(['All', ...uniqueTypes, ...(hasSold ? ['Sold'] : [])]);
+          } else {
+            setCategories([]);
+          }
         } else {
           setAllProperties([]);
+          setCategories([]);
         }
       } catch (err) {
         console.error("Sanity fetch error:", err);
@@ -85,7 +83,7 @@ const Properties = ({ onInquire }) => {
 
     fetchData();
 
-    const subscription = client.listen(`*[_type == "property" || _type == "propertyType"]`).subscribe(() => {
+    const subscription = client.listen(`*[_type == "property"]`).subscribe(() => {
       fetchData();
     });
 
