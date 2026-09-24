@@ -16,6 +16,15 @@ const StudioPage = () => {
         fontFamily: "'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
       }}
     >
+      <style>{`
+        /* Clean up top navbar: hide workspace tool switch tabs (Navigation / Releases) */
+        header [role="tablist"],
+        header nav[aria-label="Workspace tools"],
+        [data-testid="studio-navbar"] [role="tablist"],
+        [data-testid="tool-collapse-menu"] {
+          display: none !important;
+        }
+      `}</style>
       <Studio config={config} />
     </div>
   );

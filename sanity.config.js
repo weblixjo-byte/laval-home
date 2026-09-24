@@ -89,6 +89,13 @@ export default defineConfig({
   projectId: 'g983wkxj',
   dataset: 'production',
   basePath: '/studio',
+  releases: {
+    enabled: false,
+  },
+  scheduledDrafts: {
+    enabled: false,
+  },
+  tools: (prev) => prev.filter((tool) => tool.name !== 'releases'),
 
   studio: {
     components: {
@@ -98,7 +105,6 @@ export default defineConfig({
 
   plugins: [
     structureTool({
-      title: 'Navigation',
       structure: (S) =>
         S.list()
           .title('Executive Studio Menu')
