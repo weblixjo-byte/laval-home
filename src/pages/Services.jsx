@@ -12,13 +12,11 @@ import {
   Landmark
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
-
-import interiorImg from '../assets/about_interior.jpg';
-import exteriorImg from '../assets/about_exterior.jpeg';
+import { REAL_ESTATE_IMAGES } from '../data/realEstateImages';
 
 const Services = () => {
   return (
-    <div className="min-h-screen bg-white font-sans">
+    <div className="min-h-screen bg-white font-sans text-neutral-900 selection:bg-amber-100 selection:text-amber-900">
       {/* Hero Section */}
       <section className="pt-28 md:pt-36 pb-20 bg-neutral-50/50 border-b border-neutral-100">
         <div className="luxury-container text-center">
@@ -83,7 +81,12 @@ const Services = () => {
             viewport={{ once: true }}
             className="rounded-2xl overflow-hidden shadow-2xl h-[440px] border border-neutral-100"
           >
-            <img src={interiorImg} alt="Private Real Estate Consultation" className="w-full h-full object-cover" loading="lazy" />
+            <img 
+              src={REAL_ESTATE_IMAGES.livingDoubleHeight} 
+              alt="Private Real Estate Consultation" 
+              className="w-full h-full object-cover" 
+              loading="lazy" 
+            />
           </motion.div>
         </div>
 
@@ -95,7 +98,12 @@ const Services = () => {
             viewport={{ once: true }}
             className="rounded-2xl overflow-hidden shadow-2xl h-[440px] md:order-1 order-2 border border-neutral-100"
           >
-            <img src={exteriorImg} alt="Luxury Real Estate Marketing" className="w-full h-full object-cover" loading="lazy" />
+            <img 
+              src={REAL_ESTATE_IMAGES.heroWaterfront} 
+              alt="Luxury Real Estate Marketing" 
+              className="w-full h-full object-cover" 
+              loading="lazy" 
+            />
           </motion.div>
 
           <motion.div

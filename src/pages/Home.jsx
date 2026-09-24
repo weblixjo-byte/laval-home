@@ -1,94 +1,62 @@
 import React, { useState, useEffect } from 'react';
 // eslint-disable-next-line no-unused-vars
-import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Link, useNavigate } from 'react-router-dom';
 import { client } from '../client';
 import PropertyCard from '../components/PropertyCard';
 import Reviews from '../components/Reviews';
-
-import heroBright from '../assets/hero_bright.png';
-import financingBg from '../assets/financing_bg.png';
-import tradeinBg from '../assets/tradein_bg.png';
-import aboutShort from '../assets/about_short.jpeg';
+import { REAL_ESTATE_IMAGES } from '../data/realEstateImages';
+import { FALLBACK_PROPERTIES } from '../data/fallbackProperties';
 import { 
-  CheckCircle2, 
   ArrowRight, 
   ShieldCheck, 
   Banknote, 
   Sparkles,
-  Compass
+  Compass,
+  MapPin,
+  Search,
+  Building2,
+  Lock,
+  ArrowUpRight
 } from 'lucide-react';
 
-const FALLBACK_PROPERTIES = [
+const NEIGHBORHOODS = [
   {
-    id: 'demo-1',
-    title: 'The Skyrise Penthouse',
-    propertyType: 'Penthouse',
-    status: 'For Sale',
-    price: 4850000,
-    priceDisplayMode: 'fixed',
-    isFeatured: true,
-    isSold: false,
-    location: { neighborhood: 'Downtown Skyline', city: 'Atlanta', state: 'GA' },
-    specifications: { bedrooms: 4, bathrooms: 5, sqft: 5400, lotSize: 'Balcony Terrace', yearBuilt: 2024, garageSpaces: 3 },
-    features: ['Panoramic City Views', 'Private Elevator', 'Wine Room', 'Custom Italian Cabinetry'],
-    image: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80',
-    description: 'An architectural triumph soaring above the city, offering floor-to-ceiling glass vistas, custom marble fireplaces, and a wraparound private sky deck.'
+    name: 'Historic Roswell',
+    desc: 'Secluded wooded estates, private woodland sanctuaries, and vibrant historic dining.',
+    image: REAL_ESTATE_IMAGES.modernEstateRoswell,
+    estates: '14 Active Listings'
   },
   {
-    id: 'demo-2',
-    title: 'Roswell Modern Estate',
-    propertyType: 'Modern Estate',
-    status: 'For Sale',
-    price: 3650000,
-    priceDisplayMode: 'fixed',
-    isFeatured: true,
-    isSold: false,
-    location: { neighborhood: 'Historic Roswell', city: 'Roswell', state: 'GA' },
-    specifications: { bedrooms: 6, bathrooms: 7, sqft: 7200, lotSize: '1.4 Acres', yearBuilt: 2023, garageSpaces: 4 },
-    features: ['Infinity-Edge Pool', 'Smart Automation', 'Chef Kitchen', 'Spa Suite'],
-    image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80',
-    description: 'Nestled among secluded mature hardwoods in Roswell, this newly completed estate merges organic modernist architecture with bespoke luxury.'
+    name: 'Buckhead & Tuxedo Park',
+    desc: 'Metropolitan prestige, private gated compounds, and world-class cultural access.',
+    image: REAL_ESTATE_IMAGES.buckheadContemporary,
+    estates: '9 Active Listings'
   },
   {
-    id: 'demo-3',
-    title: 'Lake Lanier Waterfront Villa',
-    propertyType: 'Waterfront',
-    status: 'For Sale',
-    price: 5200000,
-    priceDisplayMode: 'fixed',
-    isFeatured: true,
-    isSold: false,
-    location: { neighborhood: 'North Peninsula', city: 'Gainesville', state: 'GA' },
-    specifications: { bedrooms: 5, bathrooms: 6, sqft: 6800, lotSize: '2.1 Acres', yearBuilt: 2022, garageSpaces: 3 },
-    features: ['Private Deep-Water Dock', 'Outdoor Kitchen', 'Guest House', 'Wine Cellar'],
-    image: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80',
-    description: 'Direct deep-water frontage with a private two-slip dock, expansive limestone terraces, and panoramic sunset water views.'
+    name: 'Lake Lanier Peninsula',
+    desc: 'Deep-water lakefront villas, private two-slip docks, and resort waterfront living.',
+    image: REAL_ESTATE_IMAGES.lakeLanierWaterfront,
+    estates: '6 Active Listings'
   },
   {
-    id: 'demo-4',
-    title: 'Buckhead Contemporary Residence',
-    propertyType: 'Villa',
-    status: 'For Sale',
-    price: 2980000,
-    priceDisplayMode: 'fixed',
-    isFeatured: true,
-    isSold: false,
-    location: { neighborhood: 'Tuxedo Park', city: 'Atlanta', state: 'GA' },
-    specifications: { bedrooms: 4, bathrooms: 5, sqft: 4900, lotSize: '0.85 Acres', yearBuilt: 2023, garageSpaces: 3 },
-    features: ['Courtyard Reflection Pool', 'Wellness Studio', 'Zero-Threshold Glass Walls'],
-    image: 'https://images.unsplash.com/photo-1613977257363-707ba9348227?auto=format&fit=crop&q=80',
-    description: 'A serene urban sanctuary celebrating clean architectural geometry, private inner courtyards, and museum-grade finishes.'
+    name: 'Milton Equestrian Estates',
+    desc: 'Sprawling multi-acre pastures, bespoke barns, and timeless agrarian modern manors.',
+    image: REAL_ESTATE_IMAGES.miltonEquestrianVilla,
+    estates: '8 Active Listings'
   }
 ];
 
 const Home = ({ onInquire }) => {
-  const [featuredProperties, setFeaturedProperties] = useState(FALLBACK_PROPERTIES);
+  const navigate = useNavigate();
+  const [properties, setProperties] = useState(FALLBACK_PROPERTIES);
+  const [searchCity, setSearchCity] = useState('');
+  const [searchType, setSearchType] = useState('All');
 
   useEffect(() => {
     const fetchFeatured = async () => {
       try {
-        const query = `*[_type == "property" && isFeatured == true && isSold != true][0...4] {
+        const query = `*[_type == "property" && isSold != true] | order(isFeatured desc, _createdAt desc)[0...6] {
           "id": _id,
           title,
           propertyType,
@@ -118,44 +86,13 @@ const Home = ({ onInquire }) => {
         }`;
         const data = await client.fetch(query);
         if (data && data.length > 0) {
-          setFeaturedProperties(data);
+          setProperties(data);
         } else {
-          // If no isFeatured properties, try fetching any active properties
-          const fallbackQuery = `*[_type == "property" && isSold != true][0...4] {
-            "id": _id,
-            title,
-            propertyType,
-            status,
-            price,
-            priceDisplayMode,
-            isFeatured,
-            isSold,
-            location,
-            specifications,
-            features,
-            "mainImage": mainImage {
-              asset-> {
-                _id,
-                url,
-                metadata { lqip }
-              }
-            },
-            gallery[] {
-              asset-> {
-                _id,
-                url,
-                metadata { lqip }
-              }
-            },
-            description
-          }`;
-          const fallbackData = await client.fetch(fallbackQuery);
-          if (fallbackData && fallbackData.length > 0) {
-            setFeaturedProperties(fallbackData);
-          }
+          setProperties(FALLBACK_PROPERTIES);
         }
       } catch (err) {
         console.error("Sanity fetch error:", err);
+        setProperties(FALLBACK_PROPERTIES);
       }
     };
 
@@ -168,232 +105,305 @@ const Home = ({ onInquire }) => {
     return () => subscription.unsubscribe();
   }, []);
 
+  const handleHeroSearch = (e) => {
+    e.preventDefault();
+    const params = new URLSearchParams();
+    if (searchCity.trim()) params.set('search', searchCity.trim());
+    if (searchType && searchType !== 'All') params.set('type', searchType);
+    navigate(`/properties?${params.toString()}`);
+  };
+
   return (
-    <div className="flex flex-col bg-white font-sans">
-      {/* Hero Section */}
-      <section className="relative h-[820px] md:h-[880px] flex items-end md:items-center bg-neutral-950 pb-20 md:pb-0 mt-[45px] md:mt-[70px]">
-        {/* Background Image with Gentle Overlay */}
-        <div className="absolute inset-0 overflow-hidden">
+    <div className="flex flex-col bg-white font-sans text-neutral-900 selection:bg-amber-100 selection:text-amber-900">
+      
+      {/* 1. HERO SECTION: Cinematic Architectural Splendor */}
+      <section className="relative min-h-[92vh] flex items-center justify-center bg-neutral-950 overflow-hidden pt-28 pb-20">
+        {/* Architectural Background */}
+        <div className="absolute inset-0">
           <img 
-            src={heroBright} 
-            alt="Laval Luxury Homes Architectural Portfolio" 
-            className="w-full h-full object-cover opacity-90 scale-102"
+            src={REAL_ESTATE_IMAGES.heroMasterpiece} 
+            alt="Laval Luxury Homes Architectural Estate" 
+            className="w-full h-full object-cover scale-105 opacity-90 transition-transform duration-1000"
             fetchpriority="high"
-            decoding="async"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-neutral-950/90 via-neutral-950/40 to-transparent md:bg-gradient-to-r md:from-neutral-950/80 md:via-neutral-950/30 md:to-transparent"></div>
+          {/* Refined gradient overlay */}
+          <div className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-neutral-950/40 to-neutral-950/20"></div>
+          <div className="absolute inset-0 bg-radial from-transparent via-neutral-950/30 to-neutral-950/80"></div>
         </div>
 
-        <div className="relative z-10 luxury-container w-full">
-          <div className="max-w-2xl text-white text-left">
-            <motion.div
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/15 text-[#D4AF37] text-xs font-semibold uppercase tracking-[0.2em] mb-6"
-            >
-              <Sparkles size={13} /> Prime Real Estate Advisory
-            </motion.div>
+        <div className="relative z-10 luxury-container w-full flex flex-col items-center text-center text-white my-auto">
+          {/* Eyebrow Pill */}
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-[#D4AF37] text-xs font-semibold uppercase tracking-[0.25em] mb-8 shadow-sm"
+          >
+            <Sparkles size={13} /> Exclusive Private Client Advisory
+          </motion.div>
 
-            <motion.h1 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2, duration: 0.7 }}
-              className="text-4xl sm:text-6xl md:text-7xl font-bold leading-[1.08] mb-6 tracking-tight"
-            >
-              Curated Luxury Estates & Residences
-            </motion.h1>
+          {/* Main Headline */}
+          <motion.h1 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2, duration: 0.8 }}
+            className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-bold leading-[1.05] tracking-tight max-w-5xl mb-6 text-white"
+          >
+            Exceptional Living. <br className="hidden sm:block" />
+            <span className="font-light text-neutral-200">Curated Architectural Estates.</span>
+          </motion.h1>
 
-            <motion.p 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.4, duration: 0.7 }}
-              className="text-base sm:text-lg mb-10 text-neutral-300 max-w-xl leading-relaxed font-light"
-            >
-              Architectural masterworks, waterfront villas, and premier penthouses curated for discerning buyers seeking discreet representation and unrivaled living.
-            </motion.p>
-            
-            <motion.div 
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.6, duration: 0.7 }}
-              className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-5"
-            >
-              <Link 
-                to="/properties" 
-                className="bg-[#D4AF37] hover:bg-[#C5A059] text-neutral-950 font-semibold py-4 px-9 rounded-full text-xs uppercase tracking-[0.15em] flex items-center justify-center transition-all shadow-lg hover:shadow-xl"
-              >
-                Browse Portfolio
-                <ArrowRight size={15} className="ml-2.5" />
-              </Link>
-              <Link 
-                to="/contact" 
-                className="bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/25 text-white font-semibold py-4 px-9 rounded-full text-xs uppercase tracking-[0.15em] text-center transition-all"
-              >
-                Schedule Private Tour
-              </Link>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* About Us Preview */}
-      <section className="py-28 md:py-36 bg-white overflow-hidden">
-        <div className="luxury-container">
-          <div className="flex flex-col lg:flex-row items-center gap-16 lg:gap-24">
-            <motion.div 
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.7 }}
-              viewport={{ once: true }}
-              className="lg:w-1/2 relative"
-            >
-              <div className="relative rounded-2xl overflow-hidden shadow-2xl border border-neutral-100">
-                <img 
-                  src={aboutShort} 
-                  alt="Laval Luxury Homes Advisory" 
-                  className="w-full h-[460px] md:h-[540px] object-cover" 
-                  loading="lazy" 
-                  decoding="async" 
+          {/* Subtitle */}
+          <motion.p 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.4, duration: 0.8 }}
+            className="text-base sm:text-lg text-neutral-300 max-w-2xl mx-auto font-light leading-relaxed mb-12"
+          >
+            Representing premier modern villas, waterfront retreats, and skyrise penthouses with institutional rigor and complete discretion.
+          </motion.p>
+          
+          {/* Floating Luxury Quick Search Box */}
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.6, duration: 0.8 }}
+            className="w-full max-w-3xl bg-white/95 backdrop-blur-md p-3 sm:p-4 rounded-2xl md:rounded-full shadow-2xl border border-white/40 text-neutral-900"
+          >
+            <form onSubmit={handleHeroSearch} className="flex flex-col md:flex-row items-center gap-3">
+              <div className="flex-1 flex items-center gap-3 px-4 py-2 w-full border-b md:border-b-0 md:border-r border-neutral-200">
+                <MapPin size={16} className="text-[#D4AF37] shrink-0" />
+                <input 
+                  type="text"
+                  placeholder="Location (e.g. Roswell, Buckhead, Lake Lanier)..."
+                  value={searchCity}
+                  onChange={(e) => setSearchCity(e.target.value)}
+                  className="w-full bg-transparent text-xs sm:text-sm font-medium outline-none placeholder:text-neutral-400 placeholder:font-normal"
                 />
               </div>
-              <div className="absolute -bottom-6 -right-6 hidden sm:block p-6 rounded-2xl bg-white shadow-xl border border-neutral-100 max-w-xs">
-                <span className="text-[10px] uppercase tracking-widest text-[#D4AF37] font-semibold block mb-1">
-                  Roswell Headquarters
-                </span>
-                <p className="text-xs text-neutral-600 font-light leading-snug">
-                  110 Mansell Cir Suite 306, Roswell GA — Bespoke private real estate advisory.
-                </p>
-              </div>
-            </motion.div>
-            
-            <motion.div 
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.7 }}
-              viewport={{ once: true }}
-              className="lg:w-1/2 space-y-6 text-left"
-            >
-              <div className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.25em] text-[#D4AF37]">
-                <Compass size={14} /> The Firm
-              </div>
-              <h2 className="text-3xl md:text-5xl font-semibold text-neutral-900 tracking-tight leading-tight">
-                Architectural Integrity. Confidential Advisory.
-              </h2>
-              <p className="text-base text-neutral-600 font-light leading-relaxed">
-                Laval Luxury Homes was established to redefine luxury property representation. We represent distinguished estates, modern architectural triumphs, and high-net-worth acquisitions across Roswell, Greater Atlanta, and premier coastal retreats.
-              </p>
-              <p className="text-sm text-neutral-500 font-light leading-relaxed">
-                Every residence in our portfolio undergoes thorough architectural and legal appraisal, ensuring our clients transact with complete discretion, institutional certainty, and enduring value.
-              </p>
-              <div className="pt-4">
-                <Link 
-                  to="/about" 
-                  className="inline-flex items-center text-xs font-semibold uppercase tracking-[0.2em] text-neutral-900 hover:text-[#D4AF37] group transition-colors"
+
+              <div className="flex-1 flex items-center gap-3 px-4 py-2 w-full border-b md:border-b-0 md:border-r border-neutral-200">
+                <Building2 size={16} className="text-[#D4AF37] shrink-0" />
+                <select
+                  value={searchType}
+                  onChange={(e) => setSearchType(e.target.value)}
+                  className="w-full bg-transparent text-xs sm:text-sm font-medium outline-none text-neutral-800 cursor-pointer appearance-none"
                 >
-                  <span className="border-b-2 border-neutral-900 pb-1 group-hover:border-[#D4AF37]">
-                    Discover Our Advisory Story
-                  </span>
-                  <ArrowRight size={15} className="ml-3 transition-transform group-hover:translate-x-1.5" />
-                </Link>
+                  <option value="All">All Property Types</option>
+                  <option value="Villas">Modern Villas</option>
+                  <option value="Penthouses">Skyrise Penthouses</option>
+                  <option value="Estates">Private Estates</option>
+                  <option value="Waterfront">Waterfront Residences</option>
+                  <option value="Mansions">Grand Mansions</option>
+                </select>
               </div>
-            </motion.div>
-          </div>
+
+              <button
+                type="submit"
+                className="w-full md:w-auto px-8 py-3.5 rounded-full bg-neutral-950 text-white font-semibold text-xs uppercase tracking-wider hover:bg-[#D4AF37] transition-all flex items-center justify-center gap-2 shadow-md shrink-0"
+              >
+                <Search size={14} />
+                <span>Search Portfolio</span>
+              </button>
+            </form>
+          </motion.div>
+
+          {/* Quick Statistics Banner */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.8, duration: 0.8 }}
+            className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-12 mt-16 pt-8 border-t border-white/10 w-full max-w-4xl text-neutral-300"
+          >
+            <div>
+              <div className="text-2xl md:text-3xl font-bold text-white">$1.2B+</div>
+              <div className="text-[10px] uppercase tracking-widest text-[#D4AF37] font-semibold mt-0.5">Volume Advised</div>
+            </div>
+            <div>
+              <div className="text-2xl md:text-3xl font-bold text-white">100%</div>
+              <div className="text-[10px] uppercase tracking-widest text-[#D4AF37] font-semibold mt-0.5">Discretion Rate</div>
+            </div>
+            <div>
+              <div className="text-2xl md:text-3xl font-bold text-white">98.4%</div>
+              <div className="text-[10px] uppercase tracking-widest text-[#D4AF37] font-semibold mt-0.5">List-to-Sale Ratio</div>
+            </div>
+            <div>
+              <div className="text-2xl md:text-3xl font-bold text-white">Roswell, GA</div>
+              <div className="text-[10px] uppercase tracking-widest text-[#D4AF37] font-semibold mt-0.5">Headquarters</div>
+            </div>
+          </motion.div>
         </div>
       </section>
 
-      {/* Featured Residences Portfolio */}
-      <section className="py-24 bg-neutral-50/50 border-y border-neutral-100">
+      {/* 2. FEATURED RESIDENCES SECTION */}
+      <section className="py-24 md:py-32 bg-white">
         <div className="luxury-container">
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-12 gap-4">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-14 gap-6">
             <div>
-              <span className="text-[11px] uppercase tracking-[0.3em] text-[#D4AF37] font-semibold block mb-1">
-                Curated Selection
+              <span className="text-[11px] uppercase tracking-[0.3em] text-[#D4AF37] font-semibold block mb-2">
+                Prime Inventory
               </span>
-              <h2 className="text-3xl md:text-4xl font-semibold text-neutral-900 tracking-tight">
-                Featured Residences
+              <h2 className="text-3xl md:text-5xl font-semibold text-neutral-900 tracking-tight">
+                Featured Exclusive Residences
               </h2>
             </div>
             <Link 
               to="/properties" 
-              className="text-xs font-semibold uppercase tracking-[0.15em] text-neutral-500 hover:text-neutral-950 transition-colors flex items-center gap-1.5 group"
+              className="inline-flex items-center gap-2 text-xs uppercase tracking-wider font-semibold text-neutral-900 hover:text-[#D4AF37] transition-colors group"
             >
-              <span>Explore All Residences</span>
+              <span>Explore All Residences ({properties.length})</span>
               <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
             </Link>
           </div>
           
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
-            {featuredProperties.map((property, idx) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {properties.slice(0, 6).map((property, idx) => (
               <PropertyCard key={property.id || idx} property={property} onSelect={onInquire} />
             ))}
           </div>
         </div>
       </section>
 
-      {/* Pillars of Excellence Section */}
-      <section className="py-32 bg-white">
+      {/* 3. EDITORIAL PHILOSOPHY & ADVISORY SPOTLIGHT */}
+      <section className="py-24 md:py-32 bg-neutral-50/70 border-y border-neutral-100">
         <div className="luxury-container">
-          <div className="text-center mb-20">
-            <span className="text-xs font-semibold uppercase tracking-[0.3em] text-[#D4AF37] block mb-3">
-              The Laval Standard
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+            
+            {/* Left Image Collage */}
+            <div className="lg:col-span-6 relative">
+              <div className="rounded-2xl overflow-hidden shadow-2xl border border-neutral-200/80">
+                <img 
+                  src={REAL_ESTATE_IMAGES.heroVillaTwilight} 
+                  alt="Modern Luxury Living" 
+                  className="w-full h-[520px] object-cover" 
+                  loading="lazy" 
+                />
+              </div>
+              <div className="absolute -bottom-8 -right-6 hidden sm:block p-6 rounded-2xl bg-white shadow-xl border border-neutral-100 max-w-xs text-left">
+                <div className="flex items-center gap-2 text-[#D4AF37] mb-1">
+                  <Lock size={14} />
+                  <span className="text-[10px] uppercase tracking-widest font-semibold">Off-Market Advisory</span>
+                </div>
+                <p className="text-xs text-neutral-600 font-light leading-relaxed">
+                  Over 40% of our portfolio is transacted off-market with zero public syndication for absolute client privacy.
+                </p>
+              </div>
+            </div>
+
+            {/* Right Narrative */}
+            <div className="lg:col-span-6 space-y-6 text-left">
+              <span className="text-xs uppercase tracking-[0.25em] text-[#D4AF37] font-semibold block">
+                The Laval Standard
+              </span>
+              <h2 className="text-3xl md:text-5xl font-semibold text-neutral-900 tracking-tight leading-tight">
+                Architectural Precision. <br />Discreet Representation.
+              </h2>
+              <p className="text-base text-neutral-600 font-light leading-relaxed">
+                Laval Luxury Homes was established to serve buyers and sellers who view luxury residential real estate through the lens of architectural curation and enduring equity.
+              </p>
+              <p className="text-sm text-neutral-500 font-light leading-relaxed">
+                From historic estates in Roswell to modern glass pavilions in Buckhead and lakefront retreats on Lake Lanier, our advisors combine deep municipal zoning expertise, private banking mortgage structuring, and confidential off-market syndication.
+              </p>
+
+              <div className="grid grid-cols-2 gap-4 pt-2">
+                <div className="p-4 rounded-xl bg-white border border-neutral-200/80">
+                  <div className="text-[#D4AF37] font-semibold text-lg mb-1">01</div>
+                  <h4 className="text-xs uppercase tracking-wider font-semibold text-neutral-900 mb-1">Title & Deed Rigor</h4>
+                  <p className="text-[11px] text-neutral-500 font-light">Comprehensive environmental, title, and architectural appraisal.</p>
+                </div>
+                <div className="p-4 rounded-xl bg-white border border-neutral-200/80">
+                  <div className="text-[#D4AF37] font-semibold text-lg mb-1">02</div>
+                  <h4 className="text-xs uppercase tracking-wider font-semibold text-neutral-900 mb-1">Private Wealth Financing</h4>
+                  <p className="text-[11px] text-neutral-500 font-light">Direct underwriting liaison for jumbo and portfolio mortgages.</p>
+                </div>
+              </div>
+
+              <div className="pt-4">
+                <Link 
+                  to="/about" 
+                  className="bg-neutral-950 text-white px-8 py-3.5 rounded-full text-xs uppercase tracking-[0.15em] font-semibold hover:bg-[#D4AF37] transition-all inline-flex items-center gap-2 shadow-sm"
+                >
+                  <span>Our Heritage & Advisory</span>
+                  <ArrowRight size={14} />
+                </Link>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      {/* 4. PREMIER NEIGHBORHOODS SHOWCASE */}
+      <section className="py-24 md:py-32 bg-white">
+        <div className="luxury-container">
+          <div className="text-center mb-16 space-y-3">
+            <span className="text-xs uppercase tracking-[0.3em] text-[#D4AF37] font-semibold block">
+              Curated Enclaves
             </span>
             <h2 className="text-3xl md:text-5xl font-semibold text-neutral-900 tracking-tight">
-              A Bespoke Real Estate Experience
+              Premier Georgia Neighborhoods
             </h2>
+            <p className="text-xs md:text-sm text-neutral-500 font-light max-w-xl mx-auto leading-relaxed">
+              Explore the architectural character and private enclaves where we actively represent exclusive luxury estates.
+            </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-            {[
-              { title: 'Architectural Verification', desc: 'Every estate undergoes thorough structural, spatial, and deed vetting for complete peace of mind.', Icon: ShieldCheck },
-              { title: 'Bespoke Mortgage Solutions', desc: 'Tailored jumbo financing and private wealth liquidity options for seamless acquisition.', Icon: Banknote },
-              { title: 'Discreet Off-Market Portfolio', desc: 'Private transactions conducted with utmost client confidentiality and global syndication.', Icon: Compass },
-              { title: 'White-Glove Advisory', desc: 'Dedicated client partners guiding every aspect of closing, design customization, and transition.', Icon: Sparkles },
-            ].map((pillar, i) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {NEIGHBORHOODS.map((hood, idx) => (
               <div 
-                key={i} 
-                className="flex flex-col items-center p-8 md:p-10 rounded-2xl border border-neutral-200/70 bg-neutral-50/50 hover:bg-neutral-950 hover:text-white transition-all duration-300 group text-center"
+                key={idx}
+                className="group relative rounded-2xl overflow-hidden aspect-[4/5] bg-neutral-900 shadow-md cursor-pointer text-left"
+                onClick={() => navigate(`/properties?search=${encodeURIComponent(hood.name)}`)}
               >
-                <div className="w-12 h-12 mb-6 rounded-full bg-white group-hover:bg-neutral-900 border border-neutral-200 group-hover:border-neutral-800 flex items-center justify-center text-[#D4AF37] group-hover:scale-110 transition-transform">
-                  <pillar.Icon size={22} strokeWidth={1.5} />
+                <img 
+                  src={hood.image} 
+                  alt={hood.name} 
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-80"
+                  loading="lazy"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-neutral-950/40 to-transparent"></div>
+                
+                <div className="absolute bottom-0 inset-x-0 p-6 flex flex-col justify-end text-white">
+                  <span className="text-[10px] uppercase tracking-widest text-[#D4AF37] font-semibold mb-1">
+                    {hood.estates}
+                  </span>
+                  <h3 className="text-lg md:text-xl font-semibold mb-2 group-hover:text-[#D4AF37] transition-colors">
+                    {hood.name}
+                  </h3>
+                  <p className="text-xs text-neutral-300 font-light line-clamp-2 leading-relaxed">
+                    {hood.desc}
+                  </p>
+                  <div className="pt-3 flex items-center text-[10px] uppercase tracking-wider font-semibold text-white/80 group-hover:text-white">
+                    <span>View Residences</span>
+                    <ArrowUpRight size={13} className="ml-1" />
+                  </div>
                 </div>
-                <h4 className="font-semibold text-xs uppercase tracking-[0.15em] mb-3 text-neutral-900 group-hover:text-white">
-                  {pillar.title}
-                </h4>
-                <p className="text-xs text-neutral-500 group-hover:text-neutral-400 leading-relaxed font-light">
-                  {pillar.desc}
-                </p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Advisory & Mortgage Banners */}
+      {/* 5. FINANCING & VALUATION BANNERS */}
       <section className="py-20 bg-neutral-50/60 border-t border-neutral-100">
         <div className="luxury-container">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-10">
             
-            {/* Mortgage Pre-Approval Banner */}
-            <motion.div 
-              whileHover={{ y: -6 }}
-              transition={{ duration: 0.3 }}
-              className="group relative h-[460px] md:h-[520px] flex flex-col justify-end p-8 md:p-14 rounded-2xl overflow-hidden text-left shadow-xl"
-            >
+            {/* Mortgage Banner */}
+            <div className="group relative h-[460px] md:h-[520px] flex flex-col justify-end p-8 md:p-14 rounded-2xl overflow-hidden text-left shadow-xl">
               <div className="absolute inset-0">
                 <img 
-                  src={financingBg} 
+                  src={REAL_ESTATE_IMAGES.financingMortgageBanner} 
                   alt="Mortgage and Wealth Financing" 
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
                   loading="lazy" 
-                  decoding="async" 
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-neutral-950/50 to-transparent"></div>
+                <div className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-neutral-950/55 to-transparent"></div>
               </div>
               
               <div className="relative z-10">
                 <span className="text-[10px] uppercase tracking-[0.25em] text-[#D4AF37] font-semibold block mb-2">
-                  Acquisition Advisory
+                  Private Wealth Financing
                 </span>
                 <h3 className="text-2xl md:text-4xl font-semibold text-white mb-3">
                   Luxury Mortgage Pre-Approval
@@ -402,61 +412,38 @@ const Home = ({ onInquire }) => {
                   Confidential jumbo mortgage structuring and private banking asset-backed liquidity for premier acquisitions.
                 </p>
                 
-                <ul className="space-y-2.5 mb-8 hidden sm:block">
-                  <li className="flex items-center text-xs font-normal text-white/90">
-                    <CheckCircle2 size={14} className="mr-2.5 text-[#D4AF37]" /> Rapid 24-hour institutional assessment
-                  </li>
-                  <li className="flex items-center text-xs font-normal text-white/90">
-                    <CheckCircle2 size={14} className="mr-2.5 text-[#D4AF37]" /> Bank-ready 1-page A4 application desk
-                  </li>
-                </ul>
-                
                 <Link 
                   to="/apply-financing" 
                   className="bg-[#D4AF37] text-neutral-950 font-semibold py-3.5 px-8 rounded-full text-xs uppercase tracking-[0.15em] inline-flex items-center hover:bg-[#C5A059] transition-all shadow-md"
                 >
-                  Start Pre-Approval
+                  Start 5-Step Pre-Approval
                   <ArrowRight size={14} className="ml-2.5" />
                 </Link>
               </div>
-            </motion.div>
+            </div>
 
-            {/* Estate Valuation & Listing Consultation */}
-            <motion.div 
-              whileHover={{ y: -6 }}
-              transition={{ duration: 0.3 }}
-              className="group relative h-[460px] md:h-[520px] flex flex-col justify-end p-8 md:p-14 rounded-2xl overflow-hidden text-left shadow-xl"
-            >
+            {/* Valuation Banner */}
+            <div className="group relative h-[460px] md:h-[520px] flex flex-col justify-end p-8 md:p-14 rounded-2xl overflow-hidden text-left shadow-xl">
               <div className="absolute inset-0">
                 <img 
-                  src={tradeinBg} 
-                  alt="Property Valuation & Advisory" 
+                  src={REAL_ESTATE_IMAGES.valuationBanner} 
+                  alt="Estate Valuation & Advisory" 
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
                   loading="lazy" 
-                  decoding="async" 
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-neutral-950/50 to-transparent"></div>
+                <div className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-neutral-950/55 to-transparent"></div>
               </div>
               
               <div className="relative z-10">
                 <span className="text-[10px] uppercase tracking-[0.25em] text-[#D4AF37] font-semibold block mb-2">
-                  Seller Representation
+                  Seller Advisory
                 </span>
                 <h3 className="text-2xl md:text-4xl font-semibold text-white mb-3">
-                  Private Property Valuation
+                  Confidential Estate Valuation
                 </h3>
                 <p className="text-xs md:text-sm text-neutral-300 mb-8 font-light max-w-sm leading-relaxed">
-                  Discover the true market equity and global buyer appetite for your estate with our confidential advisory appraisal.
+                  Unlock the true market equity and private buyer appetite for your residence with our confidential advisory appraisal.
                 </p>
-                
-                <ul className="space-y-2.5 mb-8 hidden sm:block">
-                  <li className="flex items-center text-xs font-normal text-white/90">
-                    <CheckCircle2 size={14} className="mr-2.5 text-[#D4AF37]" /> Discreet off-market syndication
-                  </li>
-                  <li className="flex items-center text-xs font-normal text-white/90">
-                    <CheckCircle2 size={14} className="mr-2.5 text-[#D4AF37]" /> Bespoke architectural cinematography
-                  </li>
-                </ul>
                 
                 <Link 
                   to="/contact" 
@@ -466,13 +453,13 @@ const Home = ({ onInquire }) => {
                   <ArrowRight size={14} className="ml-2.5" />
                 </Link>
               </div>
-            </motion.div>
+            </div>
 
           </div>
         </div>
       </section>
 
-      {/* Client Reviews Section */}
+      {/* 6. VERIFIED CLIENT TESTIMONIALS */}
       <Reviews />
     </div>
   );

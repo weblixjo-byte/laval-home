@@ -10,13 +10,11 @@ import {
   Compass,
   ArrowRight
 } from 'lucide-react';
-
-import aboutExterior from '../assets/about_exterior.jpeg';
-import aboutInterior from '../assets/about_interior.jpg';
+import { REAL_ESTATE_IMAGES } from '../data/realEstateImages';
 
 const About = () => {
   return (
-    <div className="min-h-screen bg-white pt-28 md:pt-36 font-sans">
+    <div className="min-h-screen bg-white pt-28 md:pt-36 font-sans text-neutral-900 selection:bg-amber-100 selection:text-amber-900">
       {/* Hero Section */}
       <section className="luxury-container mb-24 md:mb-32">
         <div className="flex flex-col lg:flex-row gap-12 lg:gap-20 items-center">
@@ -69,7 +67,7 @@ const About = () => {
           >
             <div className="relative rounded-2xl overflow-hidden shadow-2xl border border-neutral-100">
               <img 
-                src={aboutExterior} 
+                src={REAL_ESTATE_IMAGES.advisoryExterior} 
                 alt="Laval Luxury Homes Headquarters" 
                 className="w-full h-[420px] md:h-[560px] object-cover"
                 loading="lazy"
@@ -143,7 +141,7 @@ const About = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
           <div className="rounded-2xl overflow-hidden shadow-2xl border border-neutral-100 h-[450px]">
             <img 
-              src={aboutInterior} 
+              src={REAL_ESTATE_IMAGES.advisoryInterior} 
               alt="Laval Luxury Homes Advisory Interior" 
               className="w-full h-full object-cover" 
               loading="lazy" 

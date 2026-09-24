@@ -12,7 +12,6 @@ import {
   Square, 
   Calendar, 
   Warehouse, 
-  Compass, 
   ShieldCheck, 
   PhoneCall, 
   FileText,
@@ -21,14 +20,17 @@ import {
   MapPin,
   Sparkles,
   ChevronRight,
-  LandPlot
+  LandPlot,
+  Calculator,
+  User,
+  Mail
 } from 'lucide-react';
 
 const WEB3FORMS_ACCESS_KEY = "d7f8311f-fb43-4cdd-96ed-afcf8c00bba3";
 
 const PropertyDetailsModal = ({ isOpen, onClose, property }) => {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState('overview'); // 'overview', 'story', 'inquire'
+  const [activeTab, setActiveTab] = useState('overview'); // 'overview', 'story', 'calculator', 'inquire'
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   
@@ -37,6 +39,12 @@ const PropertyDetailsModal = ({ isOpen, onClose, property }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState(null);
+
+  // Mortgage Calculator state
+  const propertyPrice = property?.price || 3500000;
+  const [downPaymentPercent, setDownPaymentPercent] = useState(20);
+  const [interestRate, setInterestRate] = useState(6.5);
+  const [loanTermYears, setLoanTermYears] = useState(30);
 
   // Reset tab & active image when property changes
   const [prevPropId, setPrevPropId] = useState(null);
@@ -76,9 +84,32 @@ const PropertyDetailsModal = ({ isOpen, onClose, property }) => {
     }
   }, [isOpen, property, allImages]);
 
+  // Calculate monthly mortgage
+  const mortgageCalculation = useMemo(() => {
+    const principal = propertyPrice * (1 - downPaymentPercent / 100);
+    const monthlyRate = (interestRate / 100) / 12;
+    const numberOfPayments = loanTermYears * 12;
+    
+    if (monthlyRate === 0) return Math.round(principal / numberOfPayments);
+    
+    const monthlyPI = Math.round(
+      (principal * monthlyRate * Math.pow(1 + monthlyRate, numberOfPayments)) /
+      (Math.pow(1 + monthlyRate, numberOfPayments) - 1)
+    );
+    const estimatedTax = Math.round((propertyPrice * 0.011) / 12);
+    const estimatedInsurance = Math.round((propertyPrice * 0.0035) / 12);
+    
+    return {
+      principal,
+      monthlyPI: isNaN(monthlyPI) ? 0 : monthlyPI,
+      estimatedTax,
+      estimatedInsurance,
+      totalMonthly: (isNaN(monthlyPI) ? 0 : monthlyPI) + estimatedTax + estimatedInsurance
+    };
+  }, [propertyPrice, downPaymentPercent, interestRate, loanTermYears]);
+
   if (!property) return null;
 
-  // Helper srcset
   const getSrcSet = (index) => {
     const imgAsset = index === 0 
       ? (property.mainImage || property.image) 
@@ -177,7 +208,7 @@ const PropertyDetailsModal = ({ isOpen, onClose, property }) => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-[999] flex items-center justify-center p-3 md:p-6 bg-neutral-950/80 backdrop-blur-md overflow-y-auto"
+          className="fixed inset-0 z-[999] flex items-center justify-center p-3 md:p-6 bg-neutral-950/80 backdrop-blur-md overflow-y-auto font-sans"
           onClick={onClose}
         >
           <motion.div
@@ -185,7 +216,7 @@ const PropertyDetailsModal = ({ isOpen, onClose, property }) => {
             animate={{ scale: 1, opacity: 1, y: 0 }}
             exit={{ scale: 0.96, opacity: 0, y: 20 }}
             transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            className="bg-white w-full max-w-6xl max-h-[92vh] overflow-y-auto shadow-2xl flex flex-col relative rounded-2xl border border-neutral-200/80 font-sans my-auto"
+            className="bg-white w-full max-w-6xl max-h-[92vh] overflow-y-auto shadow-2xl flex flex-col relative rounded-2xl border border-neutral-200/80 my-auto text-neutral-900"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Close Button */}
@@ -210,7 +241,7 @@ const PropertyDetailsModal = ({ isOpen, onClose, property }) => {
                     <span>{locationStr}</span>
                   </div>
                 </div>
-                <h2 className="text-2xl md:text-3xl font-semibold text-neutral-900">
+                <h2 className="text-2xl md:text-3xl font-semibold text-neutral-900 tracking-tight">
                   {property.title || property.name}
                 </h2>
               </div>
@@ -236,7 +267,7 @@ const PropertyDetailsModal = ({ isOpen, onClose, property }) => {
             {/* Main Content Layout */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-0 flex-grow">
               
-              {/* Left Column: Image Viewer & Gallery Strip (7 cols) */}
+              {/* Left Column: Image Viewer & Gallery Strip */}
               <div className="lg:col-span-7 p-6 md:p-8 bg-neutral-50/60 border-b lg:border-b-0 lg:border-r border-neutral-100 flex flex-col justify-between">
                 <div>
                   {/* Main High-Res Image Display */}
@@ -309,49 +340,59 @@ const PropertyDetailsModal = ({ isOpen, onClose, property }) => {
                     onClick={() => setIsLightboxOpen(true)}
                     className="text-xs uppercase tracking-widest text-neutral-900 font-semibold border-b border-[#D4AF37] pb-0.5 hover:text-[#D4AF37] transition-colors flex items-center gap-1"
                   >
-                    Fullscreen <ChevronRight size={14} />
+                    Fullscreen Gallery <ChevronRight size={14} />
                   </button>
                 </div>
               </div>
 
-              {/* Right Column: Spec Grid, Story & Inquiry Form (5 cols) */}
+              {/* Right Column: Spec Grid, Story & Form */}
               <div className="lg:col-span-5 p-6 md:p-8 flex flex-col justify-between bg-white">
                 <div>
                   {/* Navigation Tabs */}
-                  <div className="flex border-b border-neutral-100 mb-6">
+                  <div className="flex border-b border-neutral-100 mb-6 overflow-x-auto no-scrollbar gap-4">
                     <button
                       onClick={() => setActiveTab('overview')}
-                      className={`pb-3 text-xs uppercase tracking-wider font-semibold border-b-2 transition-all mr-6 flex items-center gap-2 ${
+                      className={`pb-3 text-xs uppercase tracking-wider font-semibold border-b-2 transition-all flex items-center gap-1.5 whitespace-nowrap ${
                         activeTab === 'overview' 
                           ? 'border-[#D4AF37] text-neutral-900' 
                           : 'border-transparent text-neutral-400 hover:text-neutral-600'
                       }`}
                     >
-                      <Square size={14} /> Overview & Specs
+                      <Square size={13} /> Specs
                     </button>
                     <button
                       onClick={() => setActiveTab('story')}
-                      className={`pb-3 text-xs uppercase tracking-wider font-semibold border-b-2 transition-all mr-6 flex items-center gap-2 ${
+                      className={`pb-3 text-xs uppercase tracking-wider font-semibold border-b-2 transition-all flex items-center gap-1.5 whitespace-nowrap ${
                         activeTab === 'story' 
                           ? 'border-[#D4AF37] text-neutral-900' 
                           : 'border-transparent text-neutral-400 hover:text-neutral-600'
                       }`}
                     >
-                      <FileText size={14} /> Architectural Story
+                      <FileText size={13} /> Narrative
+                    </button>
+                    <button
+                      onClick={() => setActiveTab('calculator')}
+                      className={`pb-3 text-xs uppercase tracking-wider font-semibold border-b-2 transition-all flex items-center gap-1.5 whitespace-nowrap ${
+                        activeTab === 'calculator' 
+                          ? 'border-[#D4AF37] text-neutral-900' 
+                          : 'border-transparent text-neutral-400 hover:text-neutral-600'
+                      }`}
+                    >
+                      <Calculator size={13} /> Mortgage Estimator
                     </button>
                     <button
                       onClick={() => setActiveTab('inquire')}
-                      className={`pb-3 text-xs uppercase tracking-wider font-semibold border-b-2 transition-all flex items-center gap-2 ${
+                      className={`pb-3 text-xs uppercase tracking-wider font-semibold border-b-2 transition-all flex items-center gap-1.5 whitespace-nowrap ${
                         activeTab === 'inquire' 
                           ? 'border-[#D4AF37] text-neutral-900' 
                           : 'border-transparent text-neutral-400 hover:text-neutral-600'
                       }`}
                     >
-                      <Send size={14} /> Inquire & Tour
+                      <Send size={13} /> Schedule Tour
                     </button>
                   </div>
 
-                  {/* TAB 1: Overview & Specs */}
+                  {/* TAB 1: Specs */}
                   {activeTab === 'overview' && (
                     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
                       <div className="flex items-center justify-between">
@@ -359,7 +400,6 @@ const PropertyDetailsModal = ({ isOpen, onClose, property }) => {
                         <span className="text-[10px] text-neutral-400 font-medium">Ref #{propId?.slice(-6) || 'LLH-88'}</span>
                       </div>
 
-                      {/* 6 Minimalist Icon Spec Cards */}
                       <div className="grid grid-cols-2 gap-3">
                         <div className="bg-neutral-50 p-3.5 rounded-xl border border-neutral-100 flex items-start gap-3">
                           <Bed size={18} className="text-[#D4AF37] mt-0.5" />
@@ -429,7 +469,7 @@ const PropertyDetailsModal = ({ isOpen, onClose, property }) => {
                     </motion.div>
                   )}
 
-                  {/* TAB 2: Architectural Story */}
+                  {/* TAB 2: Story */}
                   {activeTab === 'story' && (
                     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-4">
                       <h3 className="text-xs uppercase tracking-[0.2em] font-semibold text-neutral-400">Architectural Narrative</h3>
@@ -448,7 +488,85 @@ const PropertyDetailsModal = ({ isOpen, onClose, property }) => {
                     </motion.div>
                   )}
 
-                  {/* TAB 3: Inquire / Schedule Tour Form */}
+                  {/* TAB 3: Mortgage Estimator */}
+                  {activeTab === 'calculator' && (
+                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-4">
+                      <div className="flex justify-between items-center">
+                        <h3 className="text-xs uppercase tracking-[0.2em] font-semibold text-neutral-400">Mortgage & Liquidity Estimator</h3>
+                        <span className="text-xs font-semibold text-[#D4AF37]">
+                          Est. Total: ${mortgageCalculation.totalMonthly.toLocaleString()} / mo
+                        </span>
+                      </div>
+
+                      <div className="bg-neutral-50 p-5 rounded-xl border border-neutral-200/80 space-y-4">
+                        <div className="space-y-1.5">
+                          <div className="flex justify-between text-xs">
+                            <span className="text-neutral-500 font-light">Down Payment ({downPaymentPercent}%):</span>
+                            <span className="font-semibold text-neutral-800">${Math.round(propertyPrice * (downPaymentPercent / 100)).toLocaleString()}</span>
+                          </div>
+                          <input 
+                            type="range" 
+                            min="10" 
+                            max="50" 
+                            step="5"
+                            value={downPaymentPercent} 
+                            onChange={(e) => setDownPaymentPercent(Number(e.target.value))}
+                            className="w-full accent-[#D4AF37] cursor-pointer" 
+                          />
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-3">
+                          <div>
+                            <label className="text-[10px] uppercase tracking-wider text-neutral-400 font-medium block mb-1">Interest Rate (%)</label>
+                            <input 
+                              type="number" 
+                              step="0.1" 
+                              value={interestRate} 
+                              onChange={(e) => setInterestRate(Number(e.target.value))}
+                              className="w-full bg-white border border-neutral-200 rounded-lg px-3 py-2 text-xs font-semibold"
+                            />
+                          </div>
+                          <div>
+                            <label className="text-[10px] uppercase tracking-wider text-neutral-400 font-medium block mb-1">Loan Term</label>
+                            <select 
+                              value={loanTermYears} 
+                              onChange={(e) => setLoanTermYears(Number(e.target.value))}
+                              className="w-full bg-white border border-neutral-200 rounded-lg px-3 py-2 text-xs font-semibold"
+                            >
+                              <option value={30}>30 Years (Fixed)</option>
+                              <option value={15}>15 Years (Fixed)</option>
+                              <option value={10}>10/1 ARM</option>
+                              <option value={7}>7/1 ARM</option>
+                            </select>
+                          </div>
+                        </div>
+
+                        <div className="pt-3 border-t border-neutral-200/70 space-y-1.5 text-xs">
+                          <div className="flex justify-between text-neutral-500 font-light">
+                            <span>Principal & Interest:</span>
+                            <span className="text-neutral-800 font-medium">${mortgageCalculation.monthlyPI.toLocaleString()}</span>
+                          </div>
+                          <div className="flex justify-between text-neutral-500 font-light">
+                            <span>Est. Property Taxes:</span>
+                            <span className="text-neutral-800 font-medium">${mortgageCalculation.estimatedTax.toLocaleString()}</span>
+                          </div>
+                          <div className="flex justify-between text-neutral-500 font-light">
+                            <span>Est. Hazard & Title Insurance:</span>
+                            <span className="text-neutral-800 font-medium">${mortgageCalculation.estimatedInsurance.toLocaleString()}</span>
+                          </div>
+                        </div>
+
+                        <button
+                          onClick={handleApplyFinancing}
+                          className="w-full py-2.5 rounded-lg bg-neutral-900 text-white text-xs uppercase tracking-wider font-semibold hover:bg-[#D4AF37] transition-colors"
+                        >
+                          Lock Rate & Start Pre-Approval
+                        </button>
+                      </div>
+                    </motion.div>
+                  )}
+
+                  {/* TAB 4: Inquire / Schedule Tour Form */}
                   {activeTab === 'inquire' && (
                     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-4">
                       {submitted ? (
@@ -500,8 +618,29 @@ const PropertyDetailsModal = ({ isOpen, onClose, property }) => {
                   )}
                 </div>
 
-                {/* Bottom Main Action Buttons */}
+                {/* Bottom Main Action Buttons & Advisor Badge */}
                 <div className="pt-6 border-t border-neutral-100 space-y-3 mt-6">
+                  {/* Advisor card */}
+                  <div className="flex items-center justify-between p-3 rounded-xl bg-neutral-50 border border-neutral-100">
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-full bg-[#D4AF37]/20 text-[#D4AF37] flex items-center justify-center font-bold text-xs">
+                        <User size={15} />
+                      </div>
+                      <div className="text-left">
+                        <div className="text-xs font-semibold text-neutral-900">Private Advisory Desk</div>
+                        <div className="text-[10px] text-neutral-400 font-light">Laval Luxury Homes Roswell HQ</div>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <a href="tel:+14047908336" className="p-2 rounded-full bg-white border border-neutral-200 text-neutral-700 hover:text-[#D4AF37] transition-colors" title="Call Advisory">
+                        <PhoneCall size={13} />
+                      </a>
+                      <a href="mailto:concierge@lavalluxuryhomes.com" className="p-2 rounded-full bg-white border border-neutral-200 text-neutral-700 hover:text-[#D4AF37] transition-colors" title="Email Advisory">
+                        <Mail size={13} />
+                      </a>
+                    </div>
+                  </div>
+
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <button
                       onClick={handleApplyFinancing}
@@ -514,16 +653,9 @@ const PropertyDetailsModal = ({ isOpen, onClose, property }) => {
                       onClick={() => setActiveTab('inquire')}
                       className="w-full py-3.5 bg-white border border-neutral-300 hover:border-neutral-900 text-neutral-900 transition-colors text-[10px] uppercase tracking-[0.2em] font-semibold rounded-xl flex items-center justify-center gap-2"
                     >
-                      <Send size={12} /> Contact Advisory
+                      <Send size={12} /> Schedule Showing
                     </button>
                   </div>
-
-                  <a 
-                    href="tel:+14047908336" 
-                    className="w-full py-2.5 text-center text-neutral-500 hover:text-neutral-900 text-[10px] uppercase tracking-wider font-semibold flex items-center justify-center gap-2 transition-colors"
-                  >
-                    <PhoneCall size={13} className="text-[#D4AF37]" /> Private Advisory Desk: +1 (404) 790-8336
-                  </a>
                 </div>
               </div>
             </div>

@@ -1,34 +1,24 @@
-# Populate Sanity Data Script for Laval Luxury Motors (Windows Optimized)
+# Populate Sanity Data Script for Laval Luxury Homes (Windows Optimized)
 
-Write-Host "Starting data population for Sanity..." -ForegroundColor Gold
+Write-Host "Starting real estate data population for Sanity..." -ForegroundColor Gold
 
 function Create-SanityDoc($json) {
-    # On Windows PowerShell, we need to be careful with quotes
-    # Passing the JSON through a variable often helps
     $cmd = "npx"
     $args = @("sanity", "documents", "create", "--replace", $json)
     & $cmd $args
 }
 
-# 1. Categories
-Write-Host "Adding Categories..."
-Create-SanityDoc '{ "_type": "category", "_id": "cat-hypercar", "title": "Hypercar" }'
-Create-SanityDoc '{ "_type": "category", "_id": "cat-supercar", "title": "Supercar" }'
-Create-SanityDoc '{ "_type": "category", "_id": "cat-classic", "title": "Classic" }'
-Create-SanityDoc '{ "_type": "category", "_id": "cat-luxury", "title": "Luxury" }'
-Create-SanityDoc '{ "_type": "category", "_id": "cat-suv", "title": "SUV" }'
+# 1. Real Estate Property Types
+Write-Host "Adding Real Estate Property Types..."
+Create-SanityDoc '{ "_type": "propertyType", "_id": "type-villas", "name": "Villas", "order": 1, "slug": { "_type": "slug", "current": "villas" } }'
+Create-SanityDoc '{ "_type": "propertyType", "_id": "type-penthouses", "name": "Penthouses", "order": 2, "slug": { "_type": "slug", "current": "penthouses" } }'
+Create-SanityDoc '{ "_type": "propertyType", "_id": "type-estates", "name": "Estates", "order": 3, "slug": { "_type": "slug", "current": "estates" } }'
+Create-SanityDoc '{ "_type": "propertyType", "_id": "type-waterfront", "name": "Waterfront", "order": 4, "slug": { "_type": "slug", "current": "waterfront" } }'
+Create-SanityDoc '{ "_type": "propertyType", "_id": "type-mansions", "name": "Mansions", "order": 5, "slug": { "_type": "slug", "current": "mansions" } }'
+Create-SanityDoc '{ "_type": "propertyType", "_id": "type-townhouses", "name": "Townhouses", "order": 6, "slug": { "_type": "slug", "current": "townhouses" } }'
 
-# 2. Brands
-Write-Host "Adding Brands..."
-Create-SanityDoc '{ "_type": "brand", "_id": "brand-ferrari", "name": "Ferrari" }'
-Create-SanityDoc '{ "_type": "brand", "_id": "brand-lamborghini", "name": "Lamborghini" }'
-Create-SanityDoc '{ "_type": "brand", "_id": "brand-porsche", "name": "Porsche" }'
-Create-SanityDoc '{ "_type": "brand", "_id": "brand-bugatti", "name": "Bugatti" }'
-Create-SanityDoc '{ "_type": "brand", "_id": "brand-rolls", "name": "Rolls-Royce" }'
-Create-SanityDoc '{ "_type": "brand", "_id": "brand-mclaren", "name": "McLaren" }'
-
-# 3. Site Settings
+# 2. Site Settings
 Write-Host "Adding Site Settings..."
-Create-SanityDoc '{ "_type": "siteSettings", "_id": "siteSettings", "title": "Laval Luxury Motors", "footerText": "© 2026 LAVAL LUXURY MOTORS" }'
+Create-SanityDoc '{ "_type": "siteSettings", "_id": "siteSettings", "title": "Laval Luxury Homes", "footerText": "© 2026 LAVAL LUXURY HOMES. All rights reserved." }'
 
-Write-Host "Data population complete! Please refresh your Sanity Studio." -ForegroundColor Green
+Write-Host "Real estate data population complete! Please refresh your Sanity Studio." -ForegroundColor Green
