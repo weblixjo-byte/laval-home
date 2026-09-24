@@ -18,7 +18,6 @@ import {
   Send,
   X,
   MapPin,
-  Sparkles,
   ChevronRight,
   LandPlot,
   Calculator,
@@ -452,8 +451,8 @@ const PropertyDetailsModal = ({ isOpen, onClose, property }) => {
 
                       {/* Amenities Pills */}
                       <div>
-                        <div className="text-[10px] uppercase tracking-[0.2em] font-semibold text-neutral-400 mb-3 flex items-center gap-1.5">
-                          <Sparkles size={12} className="text-[#D4AF37]" /> Signature Amenities & Features
+                        <div className="text-[10px] uppercase tracking-[0.2em] font-semibold text-neutral-400 mb-3">
+                          Signature Amenities & Features
                         </div>
                         <div className="flex flex-wrap gap-2">
                           {featuresList.map((feature, idx) => (

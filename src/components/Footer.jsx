@@ -41,8 +41,12 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-20">
           {/* Col 1: Brand & Office */}
           <div className="md:col-span-1 space-y-5">
-            <Link to="/" className="text-xl font-semibold tracking-tight block text-white hover:text-[#D4AF37] transition-colors">
-              LAVAL LUXURY HOMES
+            <Link to="/" className="inline-block group mb-1">
+              <img 
+                src="/logo-light.webp" 
+                alt="Laval Luxury Homes" 
+                className="h-11 w-auto object-contain transition-transform group-hover:scale-102"
+              />
             </Link>
             <p className="text-neutral-400 text-xs leading-relaxed font-light">
               Bespoke representation for extraordinary architectural estates, modern villas, and premier penthouses.

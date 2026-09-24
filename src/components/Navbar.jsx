@@ -44,14 +44,14 @@ const Navbar = () => {
 
           <Link
             to="/"
-            className="flex flex-col text-left group"
+            className="flex items-center group py-1"
+            aria-label="Laval Luxury Homes"
           >
-            <span className="text-xl md:text-2xl font-semibold tracking-[-0.03em] text-neutral-950 leading-none group-hover:text-[#D4AF37] transition-colors">
-              LAVAL LUXURY HOMES
-            </span>
-            <span className="text-[9px] uppercase tracking-[0.3em] text-neutral-400 font-medium mt-1">
-              Architectural Estates & Advisory
-            </span>
+            <img 
+              src="/logo.webp" 
+              alt="Laval Luxury Homes" 
+              className="h-10 sm:h-12 w-auto object-contain transition-transform duration-300 group-hover:scale-102"
+            />
           </Link>
         </div>
 
@@ -124,14 +124,13 @@ const Navbar = () => {
             >
               {/* Drawer Header */}
               <div className="flex justify-between items-center mb-8 pb-4 border-b border-neutral-800">
-                <div>
-                  <span className="text-lg font-semibold tracking-tight text-white block">
-                    LAVAL LUXURY HOMES
-                  </span>
-                  <span className="text-[9px] uppercase tracking-widest text-[#D4AF37]">
-                    Prime Real Estate Advisory
-                  </span>
-                </div>
+                <Link to="/" onClick={() => setIsMenuOpen(false)}>
+                  <img 
+                    src="/logo-light.webp" 
+                    alt="Laval Luxury Homes" 
+                    className="h-10 w-auto object-contain"
+                  />
+                </Link>
                 <button
                   className="text-neutral-400 p-2 hover:text-white rounded-full transition-colors"
                   onClick={() => setIsMenuOpen(false)}

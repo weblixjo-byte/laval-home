@@ -3,7 +3,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import {
   Compass,
-  Sparkles,
+  Globe,
   ShieldCheck,
   Building,
   Key,
@@ -109,7 +109,7 @@ const Services = () => {
             className="space-y-6 md:order-2 order-1 text-left"
           >
             <div className="w-12 h-12 bg-amber-50 rounded-2xl flex items-center justify-center text-[#D4AF37] border border-amber-200/60 shadow-xs">
-              <Sparkles size={22} />
+              <Globe size={22} />
             </div>
             <h2 className="text-3xl md:text-4xl font-semibold text-neutral-900 leading-tight">
               Bespoke Seller Marketing & Global Placement

@@ -52,50 +52,50 @@ const Financing = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white pt-28 md:pt-36 font-sans">
-      {/* Hero Section */}
-      <section className="luxury-container mb-20 md:mb-28">
-        <div className="relative h-[55vh] md:h-[65vh] flex items-center justify-center overflow-hidden rounded-2xl shadow-2xl">
-          <div className="absolute inset-0">
-            <img 
-              src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80" 
-              alt="Bespoke Real Estate Financing" 
-              className="w-full h-full object-cover"
-              fetchpriority="high"
-              decoding="async"
-            />
-            <div className="absolute inset-0 bg-neutral-950/65 backdrop-blur-[1px]"></div>
-          </div>
-          
-          <div className="relative z-10 text-center text-white px-4 max-w-3xl">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7 }}
-              className="space-y-6"
-            >
-              <h1 className="text-4xl md:text-7xl font-semibold tracking-tight leading-tight">
-                Bespoke Mortgage & Acquisition Structuring
-              </h1>
-              <p className="text-sm md:text-base font-light tracking-wide max-w-xl mx-auto text-neutral-200 leading-relaxed">
-                Strategic liquidity solutions, custom jumbo mortgages, and private portfolio financing designed for ultra-luxury residential acquisitions.
-              </p>
-              <div className="pt-4 flex flex-col sm:flex-row justify-center gap-4">
-                <Link
-                  to="/apply-financing"
-                  className="bg-[#D4AF37] text-neutral-950 hover:bg-[#C5A059] px-8 py-3.5 rounded-full uppercase tracking-[0.15em] text-xs font-semibold transition-all duration-300 shadow-md inline-flex items-center justify-center gap-2"
-                >
-                  <FileCheck size={15} /> Start 5-Step Pre-Approval
-                </Link>
-                <a
-                  href="#inquiry-form"
-                  className="bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-white/20 px-8 py-3.5 rounded-full uppercase tracking-[0.15em] text-xs font-semibold transition-all duration-300"
-                >
-                  Request Consultation
-                </a>
-              </div>
-            </motion.div>
-          </div>
+    <div className="min-h-screen bg-white font-sans">
+      {/* Full-bleed Cinematic Hero Section */}
+      <section className="relative w-full min-h-[75vh] md:min-h-[82vh] flex items-center justify-center bg-neutral-950 overflow-hidden pt-32 pb-24">
+        <div className="absolute inset-0">
+          <img 
+            src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80" 
+            alt="Bespoke Real Estate Financing" 
+            className="w-full h-full object-cover scale-105 opacity-80"
+            fetchpriority="high"
+            decoding="async"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-neutral-950/60 to-neutral-950/30"></div>
+          <div className="absolute inset-0 bg-radial from-transparent via-neutral-950/20 to-neutral-950/80"></div>
+        </div>
+        
+        <div className="relative z-10 text-center text-white px-4 max-w-4xl mx-auto luxury-container my-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7 }}
+            className="space-y-6"
+          >
+            <h1 className="text-4xl sm:text-6xl md:text-7xl font-bold tracking-tight leading-[1.1] text-white">
+              Bespoke Mortgage & Acquisition Structuring
+            </h1>
+            <p className="text-base sm:text-lg font-light tracking-wide max-w-2xl mx-auto text-neutral-300 leading-relaxed">
+              Strategic liquidity solutions, custom jumbo mortgages, and private portfolio financing designed for ultra-luxury residential acquisitions.
+            </p>
+            <div className="pt-6 flex flex-col sm:flex-row justify-center items-center gap-4">
+              <Link
+                to="/apply-financing"
+                className="bg-[#D4AF37] text-neutral-950 hover:bg-[#C5A059] px-9 py-4 rounded-full uppercase tracking-[0.15em] text-xs font-semibold transition-all duration-300 shadow-lg inline-flex items-center justify-center gap-2"
+              >
+                <FileCheck size={16} /> 
+                <span>Start 5-Step Pre-Approval</span>
+              </Link>
+              <a
+                href="#inquiry-form"
+                className="bg-white/10 backdrop-blur-md border border-white/25 text-white hover:bg-white/20 px-9 py-4 rounded-full uppercase tracking-[0.15em] text-xs font-semibold transition-all duration-300"
+              >
+                Request Consultation
+              </a>
+            </div>
+          </motion.div>
         </div>
       </section>
 

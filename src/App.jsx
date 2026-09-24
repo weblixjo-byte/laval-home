@@ -19,8 +19,8 @@ const NotFound = lazy(() => import('./pages/NotFound'));
 // High-end modern loading fallback
 const PageLoader = () => (
   <div className="h-screen w-full flex flex-col items-center justify-center bg-white font-sans">
-    <div className="w-10 h-10 border-2 border-[#D4AF37] border-t-transparent rounded-full animate-spin mb-3"></div>
-    <span className="text-[11px] uppercase tracking-[0.25em] text-neutral-400 font-medium">Laval Luxury Homes</span>
+    <img src="/logo.webp" alt="Laval Luxury Homes" className="h-12 w-auto mb-6 animate-pulse" />
+    <div className="w-8 h-8 border-2 border-[#D4AF37] border-t-transparent rounded-full animate-spin"></div>
   </div>
 );
 

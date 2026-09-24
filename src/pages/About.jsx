@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { 
   Building2, 
   ShieldCheck, 
-  Sparkles, 
+  Gem, 
   Award, 
   Compass,
   ArrowRight
@@ -106,7 +106,7 @@ const About = () => {
               { 
                 title: 'White-Glove Advisory', 
                 desc: 'Dedicated private client directors guiding every phase of property acquisition, staging, and transition.', 
-                Icon: Sparkles 
+                Icon: Gem 
               }
             ].map((value, idx) => (
               <motion.div 
